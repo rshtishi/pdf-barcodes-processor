@@ -15,7 +15,7 @@ public class PdfBarcodesProcessorTest {
 	@Test
 	public void test() throws Exception {
 		//setup
-		String filePath = "src/test/resources/pdf-test1.pdf";
+		String filePath = "src/test/resources/pdf-test2.pdf";
 		//execute
 		pdfBarcodesProcessor.processPdfFile(filePath);
 		//verify
