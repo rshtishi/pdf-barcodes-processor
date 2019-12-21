@@ -3,7 +3,6 @@ package al.tirana.pdfBarcodesProcessor.pdfprocessor;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,8 +14,16 @@ import org.apache.pdfbox.pdmodel.PDResources;
 import org.apache.pdfbox.pdmodel.graphics.PDXObject;
 import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
 
-public class PdfBoxAdapter implements PdfProcessor {
+/**
+ * 
+ * @author Rando Shtishi
+ *
+ */
+public class PdfBoxPdfProcessor implements PdfProcessor {
 
+	/**
+	 * {@inheritDoc} Implemented with PdfBox library.
+	 */
 	@Override
 	public PdfDocument processPdfFile(String filePath) throws Exception {
 		File file = new File(filePath);
@@ -38,11 +45,23 @@ public class PdfBoxAdapter implements PdfProcessor {
 		}
 	}
 
+	/**
+	 * 
+	 * @param file
+	 * @param pageNumber
+	 * @return Generated the pdf page name from the pdf filename and page no.
+	 */
 	private String generatePdfPageName(File file, int pageNumber) {
 		String[] fileNameArr = file.getName().split("\\.");
 		return fileNameArr[0].concat("#page_").concat(Integer.toString(pageNumber)).concat(".").concat(fileNameArr[1]);
 	}
 
+	/**
+	 * 
+	 * @param page
+	 * @return
+	 * @throws Exception Extract all images from a pdf page.
+	 */
 	private List<BufferedImage> extractImages(PDPage page) throws Exception {
 		List<BufferedImage> imageList = new ArrayList<>();
 		PDResources resources = page.getResources();
