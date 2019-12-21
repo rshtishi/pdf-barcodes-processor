@@ -14,15 +14,20 @@ import com.google.zxing.oned.UPCEReader;
 import com.google.zxing.oned.rss.RSS14Reader;
 import com.google.zxing.oned.rss.expanded.RSSExpandedReader;
 
+/**
+ * 
+ * @author Rando Shtishi
+ *
+ */
 public class ZxingFactory {
-	
+
 	public static ZxingFactory instance = null;
-	
+
 	private ZxingFactory() {
 	}
-	
+
 	public static ZxingFactory getInstance() {
-		if(instance==null) {
+		if (instance == null) {
 			instance = new ZxingFactory();
 		}
 		return instance;
@@ -44,7 +49,7 @@ public class ZxingFactory {
 			reader = new CodaBarReader();
 			break;
 		case RSS_14:
-			reader= new RSS14Reader();
+			reader = new RSS14Reader();
 		case RSS_EXPANDED:
 			reader = new RSSExpandedReader();
 			break;

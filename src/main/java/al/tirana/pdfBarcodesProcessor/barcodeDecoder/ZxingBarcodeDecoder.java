@@ -12,25 +12,36 @@ import com.google.zxing.Result;
 import com.google.zxing.client.j2se.BufferedImageLuminanceSource;
 import com.google.zxing.common.HybridBinarizer;
 
-public class ZxingDecoder implements BarcodeDecoder {
+/**
+ * 
+ * @author Rando Shtishi
+ *
+ */
+public class ZxingBarcodeDecoder implements BarcodeDecoder {
 
+	/**
+	 * {@inheritDoc} Implemented using Zxing library.
+	 */
 	@Override
-	public String decode(BufferedImage image,ZxingDecoderType type){
-		Reader reader =  ZxingFactory.getInstance().getBarcodeReader(type);
+	public String decode(BufferedImage image, ZxingDecoderType type) {
+		Reader reader = ZxingFactory.getInstance().getBarcodeReader(type);
 		Map<DecodeHintType, Object> decodeHintTypes = new HashMap<DecodeHintType, Object>();
 		decodeHintTypes.put(DecodeHintType.TRY_HARDER, Boolean.TRUE);
 		LuminanceSource source = new BufferedImageLuminanceSource(image);
 		BinaryBitmap bitmap = new BinaryBitmap(new HybridBinarizer(source));
 		try {
-			Result result = reader.decode(bitmap,decodeHintTypes);
+			Result result = reader.decode(bitmap, decodeHintTypes);
 			return result.getText();
 		} catch (Exception e) {
 		}
 		return null;
 	}
 
+	/**
+	 * {@inheritDoc} Implemented using Zxing library.
+	 */
 	@Override
-	public String decode(BufferedImage image) throws Exception {
+	public String decode(BufferedImage image) {
 		return decode(image, ZxingDecoderType.DEFAULT);
 	}
 
