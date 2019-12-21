@@ -5,15 +5,27 @@ import static org.junit.Assert.assertEquals;
 import org.junit.Before;
 import org.junit.Test;
 
-public class PdfBoxAdapterTest {
+/**
+ * 
+ * @author Rando Shtishi
+ *
+ */
+public class PdfBoxPdfProcessorTest {
 	
-	private PdfBoxAdapter pdfProcessor;
+	private PdfBoxPdfProcessor pdfProcessor;
 	
 	@Before
 	public void setup() {
-		pdfProcessor = new PdfBoxAdapter();
+		pdfProcessor = new PdfBoxPdfProcessor();
 	}
-
+	
+	
+	/**
+	 * 
+	 * @throws Exception
+	 * Testing processing of pdf file produces the output
+	 * we want.
+	 */
 	@Test
 	public void testProcessPdfFile() throws Exception {
 		//setup
