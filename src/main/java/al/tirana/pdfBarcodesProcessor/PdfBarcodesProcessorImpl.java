@@ -3,11 +3,7 @@ package al.tirana.pdfBarcodesProcessor;
 import java.awt.geom.AffineTransform;
 import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
 import java.util.function.Function;
-
-import javax.imageio.ImageIO;
 
 import al.tirana.pdfBarcodesProcessor.barcodeDecoder.BarcodeDecoder;
 import al.tirana.pdfBarcodesProcessor.barcodeDecoder.ZxingBarcodeDecoder;
@@ -115,14 +111,13 @@ public class PdfBarcodesProcessorImpl implements PdfBarcodesProcessor {
 		convertedImage.getGraphics().drawImage(image, 0, 0, null);
 		return convertedImage;
 	}
-	
+
 	/**
 	 * 
 	 * @param img
 	 * @param angle
-	 * @return
-	 * Rotate with opencv did not work well
-	 * Temporary implmentation of rotate
+	 * @return Rotate with opencv did not work well Temporary implmentation of
+	 *         rotate
 	 */
 	public BufferedImage rotateImageByDegrees(BufferedImage img, double angle) {
 		double rads = Math.toRadians(angle);
