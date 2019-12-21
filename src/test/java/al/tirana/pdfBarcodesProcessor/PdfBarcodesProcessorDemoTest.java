@@ -2,14 +2,18 @@ package al.tirana.pdfBarcodesProcessor;
 
 import org.junit.Before;
 import org.junit.Test;
-
-public class PdfBarcodesProcessorTest {
+/**
+ * 
+ * @author Rando Shtishi
+ *
+ */
+public class PdfBarcodesProcessorDemoTest {
 	
-	PdfBarcodesProcessor pdfBarcodesProcessor;
+	PdfBarcodesProcessorDemo pdfBarcodesProcessor;
 	
 	@Before
 	public void setup(){
-		pdfBarcodesProcessor = new PdfBarcodesProcessor();
+		pdfBarcodesProcessor = new PdfBarcodesProcessorDemo();
 	}
 	
 	@Test
