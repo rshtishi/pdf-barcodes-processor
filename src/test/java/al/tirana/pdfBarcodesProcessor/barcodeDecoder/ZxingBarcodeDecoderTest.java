@@ -11,25 +11,30 @@ import javax.imageio.ImageIO;
 import org.junit.Before;
 import org.junit.Test;
 
-public class ZxingDecoderTest {
-	
-	private ZxingDecoder decoder;
-	
+/**
+ * 
+ * @author Rando Shtishi
+ *
+ */
+public class ZxingBarcodeDecoderTest {
+
+	private ZxingBarcodeDecoder decoder;
+
 	@Before
 	public void setup() {
-		decoder = new ZxingDecoder();
+		decoder = new ZxingBarcodeDecoder();
 	}
 
 	@Test
 	public void testDecode() throws Exception {
-		//setup
+		// setup
 		String file = "src/test/resources/img-test3.jpg";
 		BufferedImage image = ImageIO.read(new File(file));
-		//execute
-		String result1 = decoder.decode(image,ZxingDecoderType.CODE_39);
+		// execute
+		String result1 = decoder.decode(image, ZxingDecoderType.CODE_39);
 		String result2 = decoder.decode(image);
-		String result3 = decoder.decode(image,ZxingDecoderType.CODABAR);
-		//verify
+		String result3 = decoder.decode(image, ZxingDecoderType.CODABAR);
+		// verify
 		String expectedResult = "12345F";
 		assertEquals(result1, expectedResult);
 		assertEquals(result2, expectedResult);
