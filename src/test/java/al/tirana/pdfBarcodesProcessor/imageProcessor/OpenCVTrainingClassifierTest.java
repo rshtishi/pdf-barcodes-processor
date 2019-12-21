@@ -4,18 +4,21 @@ import java.awt.image.BufferedImage;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
-import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
 import org.junit.Before;
-import org.junit.Test;
 
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.MultiFormatWriter;
 import com.google.zxing.client.j2se.MatrixToImageWriter;
 import com.google.zxing.common.BitMatrix;
 
+/**
+ * 
+ * @author Rando Shtishi
+ *
+ */
 public class OpenCVTrainingClassifierTest {
 
 	private String posImagesPath = "/home/rando/Pictures/opencv/pos";
@@ -26,6 +29,10 @@ public class OpenCVTrainingClassifierTest {
 			BarcodeFormat.CODE_128, BarcodeFormat.EAN_8, BarcodeFormat.EAN_13, BarcodeFormat.ITF, BarcodeFormat.UPC_A,
 			BarcodeFormat.UPC_E };
 
+	/**
+	 * 
+	 * @throws Exception Generating the information need to run the classifier.
+	 */
 	@Before
 	public void setup() throws Exception {
 		File posImagesDir = generatePosDir();
@@ -34,13 +41,19 @@ public class OpenCVTrainingClassifierTest {
 
 	}
 
+	/**
+	 * To train the classifier you need to install open cv in your operating system
+	 * generate negative images,positive images ,pos.info,neg.info, pos.vec train
+	 * the classifier with opencv
+	 */
 	public void trainClassifier() {
-		//TO DO
-		//install open cv in your operating system
-		//generate neg,pos,pos.info,neg.info, pos.vec
-		//run classiffier
 	}
 
+	/**
+	 * @return
+	 * @throws Exception Generate the directory containing images with bar codes
+	 *                   that are going to be used to train the classifier.
+	 */
 	private File generatePosDir() throws Exception {
 		File posImagesDir = new File(posImagesPath);
 		if (posImagesDir.exists() && posImagesDir.list().length == 0) {
@@ -69,6 +82,12 @@ public class OpenCVTrainingClassifierTest {
 		return posImagesDir;
 	}
 
+	/**
+	 * 
+	 * @param data
+	 * @param type
+	 * @throws Exception Generates a image that contains a bar code.
+	 */
 	private void generateBarcode(String data, BarcodeFormat type) throws Exception {
 		MultiFormatWriter barcodeWriter = new MultiFormatWriter();
 		BitMatrix barcodeBitMatrix = barcodeWriter.encode(data, type, 100, 40);
@@ -78,6 +97,13 @@ public class OpenCVTrainingClassifierTest {
 
 	}
 
+	/**
+	 * @param posImagesDir
+	 * @throws Exception Generates the file that contains the information for each
+	 *                   image that is in positive directory(image path,number of
+	 *                   bar codes in image, coordinate x, coordinate y, width,
+	 *                   height).
+	 */
 	private void generatePosInfoFile(File posImagesDir) throws Exception {
 		File barcodeInfoFile = new File(parentDirPath.concat("barcodes.info"));
 		if (!barcodeInfoFile.exists()) {
@@ -94,6 +120,10 @@ public class OpenCVTrainingClassifierTest {
 		}
 	}
 
+	/**
+	 * @throws Exception Generates the file that contains the information for each
+	 *                   image that is in negative directory(only image path).
+	 */
 	private void generateNegInfoFile() throws Exception {
 		File negImagesDir = new File(negImagesPath);
 		File negInfoFile = new File(parentDirPath.concat("bg.txt"));
