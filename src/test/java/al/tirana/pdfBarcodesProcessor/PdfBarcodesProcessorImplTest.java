@@ -32,7 +32,8 @@ public class PdfBarcodesProcessorImplTest {
 		//verify
 		String expected = "DCW-00000002";
 		assertEquals(resultDoc.getPdfPageList().get(0).getDecodedBarcodes().get(0),expected);
-		//assertEquals(resultDoc2.getPdfPageList().get(0).getDecodedBarcodes().get(0),expected);
+		expected = "B121839";
+		assertEquals(resultDoc2.getPdfPageList().get(0).getDecodedBarcodes().get(0),expected);
 		System.out.println("Result: "+resultDoc2.getPdfPageList().get(0).getDecodedBarcodes().get(0));
 	}
 

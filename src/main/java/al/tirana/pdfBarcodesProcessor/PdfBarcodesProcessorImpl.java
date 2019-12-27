@@ -5,6 +5,8 @@ import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
 import java.util.function.Function;
 
+import org.apache.commons.lang3.StringUtils;
+
 import al.tirana.pdfBarcodesProcessor.barcodeDecoder.BarcodeDecoder;
 import al.tirana.pdfBarcodesProcessor.barcodeDecoder.ZxingBarcodeDecoder;
 import al.tirana.pdfBarcodesProcessor.imageProcessor.BarcodeImage;
@@ -64,7 +66,6 @@ public class PdfBarcodesProcessorImpl implements PdfBarcodesProcessor {
 				} else {
 					BufferedImage rotatedImage = this.imageProcessor.rotateImage(barcodeImage.getImage(), 180);
 					decodedBarcode = decodeImage(rotatedImage);
-
 				}
 			}
 			page.getDecodedBarcodes().add(decodedBarcode);
@@ -83,7 +84,7 @@ public class PdfBarcodesProcessorImpl implements PdfBarcodesProcessor {
 		for (int angle = 0; angle <= 100; angle += 10) {
 			BufferedImage rotatedImage = rotateImageByDegrees(image, angle);
 			decodedBarcode = decodeFunction.apply(rotatedImage);
-			if (decodedBarcode != null) {
+			if ( !StringUtils.isEmpty(StringUtils.trim(decodedBarcode)) ) {
 				return decodedBarcode;
 			}
 		}
