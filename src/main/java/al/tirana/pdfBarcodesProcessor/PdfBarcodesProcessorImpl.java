@@ -3,7 +3,11 @@ package al.tirana.pdfBarcodesProcessor;
 import java.awt.geom.AffineTransform;
 import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.util.function.Function;
+
+import javax.imageio.ImageIO;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -81,9 +85,10 @@ public class PdfBarcodesProcessorImpl implements PdfBarcodesProcessor {
 	 */
 	private String rotateImageUntilDecoded(BufferedImage image, Function<BufferedImage, String> decodeFunction) {
 		String decodedBarcode = null;
-		for (int angle = 0; angle <= 100; angle += 10) {
-			BufferedImage rotatedImage = rotateImageByDegrees(image, angle);
+		for (int angle = 0; angle <= 100; angle += 15) {
+			BufferedImage rotatedImage = this.imageProcessor.rotateImage(image, angle);
 			decodedBarcode = decodeFunction.apply(rotatedImage);
+			System.out.println(angle+" : "+decodedBarcode);
 			if ( !StringUtils.isEmpty(StringUtils.trim(decodedBarcode)) ) {
 				return decodedBarcode;
 			}
@@ -111,32 +116,6 @@ public class PdfBarcodesProcessorImpl implements PdfBarcodesProcessor {
 				BufferedImage.TYPE_3BYTE_BGR);
 		convertedImage.getGraphics().drawImage(image, 0, 0, null);
 		return convertedImage;
-	}
-
-	/**
-	 * 
-	 * @param img
-	 * @param angle
-	 * @return Rotate with opencv did not work well Temporary implmentation of
-	 *         rotate
-	 */
-	public BufferedImage rotateImageByDegrees(BufferedImage img, double angle) {
-		double rads = Math.toRadians(angle);
-		double sin = Math.abs(Math.sin(rads));
-		double cos = Math.abs(Math.cos(rads));
-		int w = img.getWidth();
-		int h = img.getHeight();
-		int newWidth = (int) Math.floor(w * cos + h * sin);
-		int newHeight = (int) Math.floor(h * cos + w * sin);
-		BufferedImage rotated = new BufferedImage(newWidth, newHeight, BufferedImage.TYPE_BYTE_INDEXED);
-		AffineTransform at = new AffineTransform();
-		at.translate((newWidth - w) / 2, (newHeight - h) / 2);
-		int x = w / 2;
-		int y = h / 2;
-		at.rotate(rads, x, y);
-		AffineTransformOp scaleOp = new AffineTransformOp(at, AffineTransformOp.TYPE_BILINEAR);
-		rotated = scaleOp.filter(img, rotated);
-		return rotated;
 	}
 
 }
