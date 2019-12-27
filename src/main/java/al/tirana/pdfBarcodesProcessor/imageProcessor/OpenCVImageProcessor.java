@@ -8,9 +8,11 @@ import org.opencv.core.Core;
 import org.opencv.core.CvType;
 import org.opencv.core.Mat;
 import org.opencv.core.MatOfPoint;
+import org.opencv.core.MatOfPoint2f;
 import org.opencv.core.MatOfRect;
 import org.opencv.core.Point;
 import org.opencv.core.Rect;
+import org.opencv.core.RotatedRect;
 import org.opencv.core.Scalar;
 import org.opencv.core.Size;
 import org.opencv.imgproc.Imgproc;
@@ -102,13 +104,29 @@ public class OpenCVImageProcessor implements ImageProcessor {
 		double radians = Math.toRadians(angle);
 		double sin = Math.abs(Math.sin(radians));
 		double cos = Math.abs(Math.cos(radians));
-		int newWidth = (int) (imageMat.width() * cos + imageMat.height() * sin);
-		int newHeight = (int) (imageMat.width() * sin + imageMat.height() * cos);
+		int newWidth = (int) Math.floor(imageMat.width() * cos + imageMat.height() * sin);
+		int newHeight = (int) Math.floor(imageMat.width() * sin + imageMat.height() * cos);
+		int dx = (int) Math.floor(newWidth /2 - (imageMat.width()/2));
+		int dy = (int) Math.floor(newHeight/2 - (imageMat.height()/2));
 		// rotating image
-		Point center = new Point(newWidth / 2, newHeight / 2);
-		Mat rotMatrix = Imgproc.getRotationMatrix2D(center, angle, 1.0); // 1.0 means 100 % scale
-		Imgproc.warpAffine(imageMat, imageMat, rotMatrix, imageMat.size());
-		return OpenCVHelper.mat2Img(imageMat);
+		Point center = new Point(imageMat.cols() / 2,imageMat.rows() / 2);
+		Mat rotMatrix = Imgproc.getRotationMatrix2D(center, 360- angle, 1.0); // 1.0 means 100 % scale
+		//adjusting the boundaries of rotMatrix
+		double[] rot_0_2 = rotMatrix.get(0, 2);
+		for (int i = 0; i < rot_0_2.length; i++) {
+		    rot_0_2[i] += dx;
+		}
+		rotMatrix.put(0, 2, rot_0_2);
+		
+		double[] rot_1_2 = rotMatrix.get(1, 2);
+		for (int i = 0; i < rot_1_2.length; i++) {
+		    rot_1_2[i] += dy;
+		}
+		rotMatrix.put(1, 2, rot_1_2);
+		
+		Mat rotatedMat = new Mat();
+		Imgproc.warpAffine(imageMat, rotatedMat, rotMatrix, new Size(newWidth,newHeight));
+		return OpenCVHelper.mat2Img(rotatedMat);
 	}
 
 }

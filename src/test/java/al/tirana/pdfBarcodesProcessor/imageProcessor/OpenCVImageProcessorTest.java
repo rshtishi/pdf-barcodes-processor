@@ -4,6 +4,8 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
+import java.awt.geom.AffineTransform;
+import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.util.List;
@@ -13,6 +15,8 @@ import javax.imageio.ImageIO;
 import org.junit.Before;
 import org.junit.Test;
 
+import al.tirana.pdfBarcodesProcessor.barcodeDecoder.ZxingBarcodeDecoder;
+
 /**
  * 
  * @author Rando Shtishi
@@ -21,10 +25,12 @@ import org.junit.Test;
 public class OpenCVImageProcessorTest {
 
 	private OpenCVImageProcessor imageProcessor;
+	private ZxingBarcodeDecoder decoder;
 
 	@Before
 	public void setup() {
 		imageProcessor = new OpenCVImageProcessor();
+		decoder = new ZxingBarcodeDecoder();
 	}
 
 	/**
@@ -51,8 +57,6 @@ public class OpenCVImageProcessorTest {
 		// setup
 		String imagePath1 = "src/test/resources/img-test1.png";
 		BufferedImage image1 = ImageIO.read(new File(imagePath1));
-		String imagePath2 = "src/test/resources/img-test2.png";
-		BufferedImage image2 = ImageIO.read(new File(imagePath2));
 		String imagePath3 = "src/test/resources/img-test3.jpg";
 		BufferedImage image3 = ImageIO.read(new File(imagePath3));
 		String imagePath4 = "src/test/resources/img-test4.png";
@@ -61,7 +65,6 @@ public class OpenCVImageProcessorTest {
 		BufferedImage image5 = ImageIO.read(new File(imagePath5));
 		// execute
 		BarcodeImage imageResult1 = imageProcessor.extractBarcodeImage(image1);
-		BarcodeImage imageResult2 = imageProcessor.extractBarcodeImage(image2);
 		BarcodeImage imageResult3 = imageProcessor.extractBarcodeImage(image3);
 		BarcodeImage imageResult4 = imageProcessor.extractBarcodeImage(image4);
 		BarcodeImage imageResult5 = imageProcessor.extractBarcodeImage(image5);
@@ -70,10 +73,6 @@ public class OpenCVImageProcessorTest {
 		assertEquals(imageResult1.getImage().getWidth(), 411);
 		assertEquals(imageResult1.getImage().getHeight(), 328);
 		assertTrue(imageResult1.isSkewed());
-		ImageIO.write(imageResult2.getImage(), "jpg", new File("src/test/resources/img-barcode-extracted2.jpg"));
-		assertEquals(imageResult2.getImage().getWidth(), 628);
-		assertEquals(imageResult2.getImage().getHeight(), 139);
-		assertFalse(imageResult2.isSkewed());
 		ImageIO.write(imageResult3.getImage(), "jpg", new File("src/test/resources/img-barcode-extracted3.jpg"));
 		assertEquals(imageResult3.getImage().getWidth(), 258);
 		assertEquals(imageResult3.getImage().getHeight(), 84);
@@ -92,14 +91,20 @@ public class OpenCVImageProcessorTest {
 	@Test
 	public void testRotateImage() throws Exception {
 		// setup
-		String imagePath = "src/test/resources/img-test2.png";
-		BufferedImage image = ImageIO.read(new File(imagePath));
+		String imagePath1 = "src/test/resources/img-test1.png";
+		String imagePath2 = "src/test/resources/img-test2.jpg";
+		BufferedImage image1 = ImageIO.read(new File(imagePath1));
+		BufferedImage image2 = ImageIO.read(new File(imagePath2));
 		// execute
-		BufferedImage imageResult = imageProcessor.rotateImage(image, 180);
+		BufferedImage imageResult1 = imageProcessor.rotateImage(image1, 50);
+		BufferedImage imageResult2 = imageProcessor.rotateImage(image2, 100);
 		// verify
-		ImageIO.write(imageResult, "jpg", new File("src/test/resources/img-rotated.jpg"));
-		assertEquals(image.getWidth(), imageResult.getWidth());
-		assertEquals(image.getHeight(), imageResult.getHeight());
+		ImageIO.write(imageResult1, "jpg", new File("src/test/resources/img-rotated-50.jpg"));
+		String expected = "B121839";
+		assertEquals(expected, decoder.decode(imageResult1));
+		ImageIO.write(imageResult2, "jpg", new File("src/test/resources/img-rotated-100.jpg"));
+		expected = "Seite5";
+		assertEquals(expected, decoder.decode(imageResult2));
 	}
 
 }
