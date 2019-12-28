@@ -61,7 +61,6 @@ public class PdfBarcodesProcessorImpl implements PdfBarcodesProcessor {
 	 */
 	private PdfPage processPage(PdfPage page) {
 		page.getImages().forEach(image -> {
-			image = convertTo3ByteBGRType(image);
 			BarcodeImage barcodeImage = this.imageProcessor.extractBarcodeImage(image);
 			String decodedBarcode = decodeImage(barcodeImage.getImage());
 			if (decodedBarcode == null) {
@@ -88,7 +87,6 @@ public class PdfBarcodesProcessorImpl implements PdfBarcodesProcessor {
 		for (int angle = 0; angle <= 100; angle += 15) {
 			BufferedImage rotatedImage = this.imageProcessor.rotateImage(image, angle);
 			decodedBarcode = decodeFunction.apply(rotatedImage);
-			System.out.println(angle+" : "+decodedBarcode);
 			if ( !StringUtils.isEmpty(StringUtils.trim(decodedBarcode)) ) {
 				return decodedBarcode;
 			}
@@ -106,16 +104,6 @@ public class PdfBarcodesProcessorImpl implements PdfBarcodesProcessor {
 		return decodedBarcode;
 	}
 
-	/**
-	 * @param image
-	 * @return Convert the BufferedImage to type that we can work with opencv
-	 *         libarary.
-	 */
-	private BufferedImage convertTo3ByteBGRType(BufferedImage image) {
-		BufferedImage convertedImage = new BufferedImage(image.getWidth(), image.getHeight(),
-				BufferedImage.TYPE_3BYTE_BGR);
-		convertedImage.getGraphics().drawImage(image, 0, 0, null);
-		return convertedImage;
-	}
+
 
 }
