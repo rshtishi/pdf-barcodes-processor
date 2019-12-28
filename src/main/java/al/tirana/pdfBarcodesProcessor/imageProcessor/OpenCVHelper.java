@@ -13,6 +13,7 @@ import org.opencv.core.MatOfPoint2f;
 import org.opencv.core.Rect;
 import org.opencv.core.RotatedRect;
 import org.opencv.imgproc.Imgproc;
+import org.opencv.utils.Converters;
 
 /**
  * 
@@ -40,10 +41,23 @@ public class OpenCVHelper {
 	 * @return The BufferedImage type image is converted to Mat type.
 	 */
 	public static Mat img2Mat(BufferedImage image) {
+		image = convertTo3ByteBGRType(image);
 		byte[] data = ((DataBufferByte) image.getRaster().getDataBuffer()).getData();
 		Mat mat = new Mat(image.getHeight(), image.getWidth(), CvType.CV_8UC3);
 		mat.put(0, 0, data);
 		return mat;
+	}
+	
+	/**
+	 * @param image
+	 * @return Convert the BufferedImage to type that we can work with opencv
+	 *         libarary.
+	 */
+	private static BufferedImage convertTo3ByteBGRType(BufferedImage image) {
+		BufferedImage convertedImage = new BufferedImage(image.getWidth(), image.getHeight(),
+				BufferedImage.TYPE_3BYTE_BGR);
+		convertedImage.getGraphics().drawImage(image, 0, 0, null);
+		return convertedImage;
 	}
 
 	/**
