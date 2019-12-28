@@ -1,13 +1,7 @@
 package al.tirana.pdfBarcodesProcessor;
 
-import java.awt.geom.AffineTransform;
-import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
 import java.util.function.Function;
-
-import javax.imageio.ImageIO;
 
 import org.apache.commons.lang3.StringUtils;
 

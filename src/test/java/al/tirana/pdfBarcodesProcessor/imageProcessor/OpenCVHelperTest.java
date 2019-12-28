@@ -16,9 +16,6 @@ import nu.pattern.OpenCV;
 
 public class OpenCVHelperTest {
 	
-
-	
-	
 	@Before
 	public void setup() throws Exception {
 		OpenCV.loadLibrary();

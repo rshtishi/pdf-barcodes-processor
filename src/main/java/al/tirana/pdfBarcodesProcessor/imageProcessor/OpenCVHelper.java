@@ -13,7 +13,6 @@ import org.opencv.core.MatOfPoint2f;
 import org.opencv.core.Rect;
 import org.opencv.core.RotatedRect;
 import org.opencv.imgproc.Imgproc;
-import org.opencv.utils.Converters;
 
 /**
  * 
