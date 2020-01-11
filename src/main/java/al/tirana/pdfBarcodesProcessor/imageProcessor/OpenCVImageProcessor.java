@@ -28,21 +28,50 @@ import nu.pattern.OpenCV;
  */
 public class OpenCVImageProcessor implements ImageProcessor {
 
+	private double barcodeRatioWidth;
+	private double barcodeRatioHeight;
+
 	public OpenCVImageProcessor() {
 		OpenCV.loadLibrary();
+		this.barcodeRatioWidth = 0.5;
+		this.barcodeRatioHeight = 0.5;
+	}
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void setBarcodeRatioToImage(double ratio) {
+		this.barcodeRatioWidth = ratio;
+		this.barcodeRatioHeight = ratio;
+
+	}
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void setBarcodeRatioToImage(double widthRatio, double heightRatio) {
+		this.barcodeRatioWidth = widthRatio;
+		this.barcodeRatioHeight = heightRatio;
+
 	}
 
 	/**
-	 * {@inheritDoc} Implemented using the OpenCV library. Not yet ready due to
-	 * classifier not being reliable because the training need more data.
+	 * {@inheritDoc}
+	 * 
+	 * Implemented using the OpenCV library. Not yet ready due to classifier not
+	 * being reliable because the training need more data.
 	 */
 	@Override
 	public List<BufferedImage> extractBarcodeImages(BufferedImage image) {
 		Mat imageMat = OpenCVHelper.img2Mat(image);
-		CascadeClassifier classifier = new CascadeClassifier("src/main/resources/classifier-3/cascade.xml");
+		CascadeClassifier classifier = new CascadeClassifier("src/main/resources/classifier-4/cascade.xml");
 		MatOfRect barcodeDetections = new MatOfRect();
-		classifier.detectMultiScale(imageMat, barcodeDetections, 1.3, 5, Objdetect.CASCADE_FIND_BIGGEST_OBJECT,
-				new Size(200, 130), new Size(800, 400));
+		int width = (int) Math.round(this.barcodeRatioWidth * imageMat.cols());
+		int height = (int) Math.round(this.barcodeRatioHeight * imageMat.rows());
+		classifier.detectMultiScale(imageMat, barcodeDetections, 1.1, 2, 0 | Objdetect.CASCADE_SCALE_IMAGE,
+				new Size(width, height), new Size());
 		// Drawing boxes
 		for (Rect rect : barcodeDetections.toArray()) {
 			Core.rectangle(imageMat, // where to draw the box
@@ -56,7 +85,9 @@ public class OpenCVImageProcessor implements ImageProcessor {
 	}
 
 	/**
-	 * {@inheritDoc} Implemented using the OpenCV library.
+	 * {@inheritDoc}
+	 * 
+	 * Implemented using the OpenCV library.
 	 */
 	@Override
 	public BarcodeImage extractBarcodeImage(BufferedImage image) {
@@ -95,7 +126,9 @@ public class OpenCVImageProcessor implements ImageProcessor {
 	}
 
 	/**
-	 * {@inheritDoc} Implemented using the OpenCV library.
+	 * {@inheritDoc}
+	 * 
+	 * Implemented using the OpenCV library.
 	 */
 	@Override
 	public BufferedImage rotateImage(BufferedImage image, double angle) {
@@ -106,26 +139,26 @@ public class OpenCVImageProcessor implements ImageProcessor {
 		double cos = Math.abs(Math.cos(radians));
 		int newWidth = (int) Math.floor(imageMat.width() * cos + imageMat.height() * sin);
 		int newHeight = (int) Math.floor(imageMat.width() * sin + imageMat.height() * cos);
-		int dx = (int) Math.floor(newWidth /2 - (imageMat.width()/2));
-		int dy = (int) Math.floor(newHeight/2 - (imageMat.height()/2));
+		int dx = (int) Math.floor(newWidth / 2 - (imageMat.width() / 2));
+		int dy = (int) Math.floor(newHeight / 2 - (imageMat.height() / 2));
 		// rotating image
-		Point center = new Point(imageMat.cols() / 2,imageMat.rows() / 2);
-		Mat rotMatrix = Imgproc.getRotationMatrix2D(center, 360- angle, 1.0); // 1.0 means 100 % scale
-		//adjusting the boundaries of rotMatrix
+		Point center = new Point(imageMat.cols() / 2, imageMat.rows() / 2);
+		Mat rotMatrix = Imgproc.getRotationMatrix2D(center, 360 - angle, 1.0); // 1.0 means 100 % scale
+		// adjusting the boundaries of rotMatrix
 		double[] rot_0_2 = rotMatrix.get(0, 2);
 		for (int i = 0; i < rot_0_2.length; i++) {
-		    rot_0_2[i] += dx;
+			rot_0_2[i] += dx;
 		}
 		rotMatrix.put(0, 2, rot_0_2);
-		
+
 		double[] rot_1_2 = rotMatrix.get(1, 2);
 		for (int i = 0; i < rot_1_2.length; i++) {
-		    rot_1_2[i] += dy;
+			rot_1_2[i] += dy;
 		}
 		rotMatrix.put(1, 2, rot_1_2);
-		
+
 		Mat rotatedMat = new Mat();
-		Imgproc.warpAffine(imageMat, rotatedMat, rotMatrix, new Size(newWidth,newHeight));
+		Imgproc.warpAffine(imageMat, rotatedMat, rotMatrix, new Size(newWidth, newHeight));
 		return OpenCVHelper.mat2Img(rotatedMat);
 	}
 

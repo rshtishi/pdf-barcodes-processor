@@ -8,12 +8,20 @@ import java.awt.geom.AffineTransform;
 import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.imageio.ImageIO;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.opencv.core.Core;
+import org.opencv.core.CvType;
+import org.opencv.core.Mat;
+import org.opencv.core.MatOfPoint;
+import org.opencv.core.Rect;
+import org.opencv.core.Size;
+import org.opencv.imgproc.Imgproc;
 
 import al.tirana.pdfBarcodesProcessor.barcodeDecoder.ZxingBarcodeDecoder;
 
@@ -34,23 +42,36 @@ public class OpenCVImageProcessorTest {
 	}
 
 	/**
-	 * @throws Exception Testing extraction bar code images from image containing
-	 *                   multiple bar codes. Not Finished.
+	 * Testing extraction bar code images from image containing multiple bar codes.
+	 * Not Finished.
+	 * 
+	 * @throws Exception
 	 */
 	@Test
 	public void testExtractBarcodeImages() throws Exception {
 		// setup
-		String imagePath = "src/test/resources/img-test5.jpg";
+		String imagePath = "src/test/resources/img-test3.jpg";
 		BufferedImage image = ImageIO.read(new File(imagePath));
 		// execute
+		imageProcessor.setBarcodeRatioToImage(0.7, 0.3);
 		List<BufferedImage> imageListResult = imageProcessor.extractBarcodeImages(image);
 		// verify
-		ImageIO.write(imageListResult.get(0), "jpg", new File("src/test/resources/img-barcode-detected.jpg"));
+		ImageIO.write(imageListResult.get(0), "jpg", new File("src/test/resources/img-barcode-extracted-x1.jpg"));
+		// setup
+		imagePath = "src/test/resources/img-test7.jpg";
+		image = ImageIO.read(new File(imagePath));
+		// execute
+		imageProcessor.setBarcodeRatioToImage(0.45, 0.15);
+		imageListResult = imageProcessor.extractBarcodeImages(image);
+		// verify
+		ImageIO.write(imageListResult.get(0), "jpg", new File("src/test/resources/img-barcode-extracted-x2.jpg"));
 	}
 
 	/**
-	 * @throws Exception Testing the extraction a bar code image from image
-	 *                   containing a single bar code.
+	 * Testing the extraction a bar code image from image containing a single bar
+	 * code.
+	 * 
+	 * @throws Exception
 	 */
 	@Test
 	public void testExtractBarcodeImage() throws Exception {
@@ -61,7 +82,7 @@ public class OpenCVImageProcessorTest {
 		BufferedImage image3 = ImageIO.read(new File(imagePath3));
 		String imagePath4 = "src/test/resources/img-test4.png";
 		BufferedImage image4 = ImageIO.read(new File(imagePath4));
-		String imagePath5 = "src/test/resources/img-test5.jpg";
+		String imagePath5 = "src/test/resources/8G3nF.jpg";
 		BufferedImage image5 = ImageIO.read(new File(imagePath5));
 		// execute
 		BarcodeImage imageResult1 = imageProcessor.extractBarcodeImage(image1);
@@ -86,7 +107,9 @@ public class OpenCVImageProcessorTest {
 	}
 
 	/**
-	 * @throws Exception Testing the rotating of image.
+	 * Testing the rotating of image.
+	 * 
+	 * @throws Exception
 	 */
 	@Test
 	public void testRotateImage() throws Exception {

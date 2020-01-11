@@ -22,8 +22,10 @@ import org.opencv.imgproc.Imgproc;
 public class OpenCVHelper {
 
 	/**
+	 * The Mat type image is converted to BufferedImage type.
+	 * 
 	 * @param mat
-	 * @return The Mat type image is converted to BufferedImage type.
+	 * @return 
 	 */
 	public static BufferedImage mat2Img(Mat mat) {
 		BufferedImage image = new BufferedImage(mat.width(), mat.height(), BufferedImage.TYPE_3BYTE_BGR);
@@ -35,9 +37,10 @@ public class OpenCVHelper {
 	}
 
 	/**
+	 * The BufferedImage type image is converted to Mat type.
 	 * 
 	 * @param image
-	 * @return The BufferedImage type image is converted to Mat type.
+	 * @return 
 	 */
 	public static Mat img2Mat(BufferedImage image) {
 		image = convertTo3ByteBGRType(image);
@@ -46,11 +49,12 @@ public class OpenCVHelper {
 		mat.put(0, 0, data);
 		return mat;
 	}
-	
+
 	/**
+	 * Convert the BufferedImage to type that we can work with opencv libarary.
+	 * 
 	 * @param image
-	 * @return Convert the BufferedImage to type that we can work with opencv
-	 *         libarary.
+	 * @return
 	 */
 	private static BufferedImage convertTo3ByteBGRType(BufferedImage image) {
 		BufferedImage convertedImage = new BufferedImage(image.getWidth(), image.getHeight(),
