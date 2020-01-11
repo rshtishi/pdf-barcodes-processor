@@ -69,7 +69,11 @@ public class OpenCVTrainingClassifierTest {
 	 */
 	@Test
 	public void trainClassifier() {
+		//TO DO
+		//Generate Vec File
+		//Run the train process
 	}
+
 
 	/**
 	 * @return
@@ -91,12 +95,12 @@ public class OpenCVTrainingClassifierTest {
 					data = "123456789012";
 					generateBarcode(data, type);
 				} else if (type == BarcodeFormat.ITF) {
-					for (int i = 10; i < 100; i++) {
+					for (int i = 10; i < 50; i++) {
 						data = Integer.toString(i);
 						generateBarcode(data, type);
 					}
 				} else {
-					for (int i = 0; i < 100; i++) {
+					for (int i = 0; i < 50; i++) {
 						data = Integer.toString(i);
 						generateBarcode(data, type);
 
@@ -109,7 +113,7 @@ public class OpenCVTrainingClassifierTest {
 			for (BarcodeFormat type : barcodes) {
 				if (type != BarcodeFormat.EAN_8 && type != BarcodeFormat.UPC_E && type != BarcodeFormat.EAN_13
 						&& type != BarcodeFormat.UPC_A && type != BarcodeFormat.ITF) {
-					for (int data = 0; data <= 100; data++) {
+					for (int data = 0; data <= 70; data++) {
 						for (int coordx = 0; coordx < coord.length; coordx++) {
 							for (int cimg = 0; cimg < bgImages.length; cimg++) {
 								generateBarcodeWithBackground(Integer.toString(data), type, coordx, bgImages[cimg]);
@@ -228,15 +232,15 @@ public class OpenCVTrainingClassifierTest {
 		File imagesDir = new File(this.imagesPath);
 		if (imagesDir.exists()) {
 			for (File imageFile : imagesDir.listFiles()) {
-				BufferedImage image = ImageIO.read(imageFile);
-				if (image.getWidth() < image.getHeight()) {
-					image = this.imageProcessor.rotateImage(image, 90);
-				}
+//				BufferedImage image = ImageIO.read(imageFile);
+//				if (image.getWidth() < image.getHeight()) {
+//					image = this.imageProcessor.rotateImage(image, 90);
+//				}
 				// resize
-				Mat imageMat = OpenCVHelper.img2Mat(image);
+				Mat imageMat = Highgui.imread(imageFile.getAbsolutePath());
 				Size size = new Size(100, 40);
 				Imgproc.resize(imageMat, imageMat, size);
-				image = OpenCVHelper.mat2Img(imageMat);
+				//image = OpenCVHelper.mat2Img(imageMat);
 				// end resize
 				String newFilePath = negImagesPath + "/" + imageFile.getName();
 				String[] nameArr = imageFile.getName().split("\\.");
@@ -244,7 +248,8 @@ public class OpenCVTrainingClassifierTest {
 				String fileType = nameArr[last];
 				File newFile = new File(newFilePath);
 				if (!newFile.exists()) {
-					ImageIO.write(image, fileType, newFile);
+					//ImageIO.write(image, fileType, newFile);
+					Highgui.imwrite(newFile.getAbsolutePath(), imageMat);
 				}
 			}
 		}
