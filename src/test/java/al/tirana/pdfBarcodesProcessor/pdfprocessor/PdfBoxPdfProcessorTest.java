@@ -2,6 +2,11 @@ package al.tirana.pdfBarcodesProcessor.pdfprocessor;
 
 import static org.junit.Assert.assertEquals;
 
+import java.awt.image.BufferedImage;
+import java.io.File;
+
+import javax.imageio.ImageIO;
+
 import org.junit.Before;
 import org.junit.Test;
 
@@ -11,37 +16,42 @@ import org.junit.Test;
  *
  */
 public class PdfBoxPdfProcessorTest {
-	
+
 	private PdfBoxPdfProcessor pdfProcessor;
-	
+
 	@Before
 	public void setup() {
 		pdfProcessor = new PdfBoxPdfProcessor();
 	}
-	
-	
+
 	/**
+	 * Testing processing of pdf file produces the output we want.
 	 * 
 	 * @throws Exception
-	 * Testing processing of pdf file produces the output
-	 * we want.
 	 */
 	@Test
 	public void testProcessPdfFile() throws Exception {
-		//setup
-		String filePath = "src/test/resources/pdf-test2.pdf";
-		//execute
+		// setup
+		String filePath = "src/test/resources/pdf-test1.pdf";
+		// execute
 		PdfDocument result = pdfProcessor.processPdfFile(filePath);
-		//verify
-		int totalPagesExpected = 1;
+		// verify
+		int totalPagesExpected = 3;
 		int pageNumberExpected = 0;
-		String pageNameExpected = "pdf-test2#page_0.pdf";
+		String pageNameExpected = "pdf-test1#page_0.pdf";
 		int totalImagesExpected = 1;
-		assertEquals(result.getTotalPages(),totalPagesExpected);
-		assertEquals(result.getPdfPageList().get(0).getPageNumber(),pageNumberExpected);
-		assertEquals(result.getPdfPageList().get(0).getPageName(),pageNameExpected);
-		assertEquals(result.getPdfPageList().get(0).getImages().size(),totalImagesExpected);
-		
+		assertEquals(totalPagesExpected, result.getTotalPages());
+		assertEquals(pageNumberExpected, result.getPdfPageList().get(0).getPageNumber());
+		assertEquals(pageNameExpected, result.getPdfPageList().get(0).getPageName());
+		assertEquals(totalImagesExpected, result.getPdfPageList().get(0).getImages().size());
+		for (PdfPage page : result.getPdfPageList()) {
+			int count = 0;
+			for (BufferedImage image : page.getImages()) {
+				String imageName = "image_" + count + "_" + page.getPageName() + ".jpg";
+				ImageIO.write(image, "jpg", new File("src/test/resources/" + imageName));
+				count++;
+			}
+		}
 	}
 
 }

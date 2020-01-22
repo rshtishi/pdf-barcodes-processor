@@ -22,7 +22,9 @@ import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
 public class PdfBoxPdfProcessor implements PdfProcessor {
 
 	/**
-	 * {@inheritDoc} Implemented with PdfBox library.
+	 * Implemented with PdfBox library.
+	 * 
+	 * {@inheritDoc}
 	 */
 	@Override
 	public PdfDocument processPdfFile(String filePath) throws Exception {
@@ -46,10 +48,11 @@ public class PdfBoxPdfProcessor implements PdfProcessor {
 	}
 
 	/**
+	 * Generated the pdf page name from the pdf filename and page no.
 	 * 
 	 * @param file
 	 * @param pageNumber
-	 * @return Generated the pdf page name from the pdf filename and page no.
+	 * @return
 	 */
 	private String generatePdfPageName(File file, int pageNumber) {
 		String[] fileNameArr = file.getName().split("\\.");
@@ -57,10 +60,11 @@ public class PdfBoxPdfProcessor implements PdfProcessor {
 	}
 
 	/**
+	 * Extract all images from a pdf page.
 	 * 
 	 * @param page
 	 * @return
-	 * @throws Exception Extract all images from a pdf page.
+	 * @throws Exception
 	 */
 	private List<BufferedImage> extractImages(PDPage page) throws Exception {
 		List<BufferedImage> imageList = new ArrayList<>();
