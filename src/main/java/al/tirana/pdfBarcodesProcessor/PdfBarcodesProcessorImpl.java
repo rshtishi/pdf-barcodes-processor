@@ -1,13 +1,13 @@
 package al.tirana.pdfBarcodesProcessor;
 
 import java.awt.image.BufferedImage;
+import java.util.List;
 import java.util.function.Function;
 
 import org.apache.commons.lang3.StringUtils;
 
 import al.tirana.pdfBarcodesProcessor.barcodeDecoder.BarcodeDecoder;
 import al.tirana.pdfBarcodesProcessor.barcodeDecoder.ZxingBarcodeDecoder;
-import al.tirana.pdfBarcodesProcessor.imageProcessor.BarcodeImage;
 import al.tirana.pdfBarcodesProcessor.imageProcessor.ImageProcessor;
 import al.tirana.pdfBarcodesProcessor.imageProcessor.OpenCVImageProcessor;
 import al.tirana.pdfBarcodesProcessor.pdfprocessor.PdfBoxPdfProcessor;
@@ -32,15 +32,7 @@ public class PdfBarcodesProcessorImpl implements PdfBarcodesProcessor {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public PdfDocument processPdfWithMultipleBarcodesPerPage(String filePath) {
-		return null;
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public PdfDocument processPdfWithSingleBarcodePerPage(String filePath) throws Exception {
+	public PdfDocument processPdfBarcodesPerPage(String filePath) throws Exception {
 		PdfProcessor pdfProcessor = new PdfBoxPdfProcessor();
 		PdfDocument pdfDocument = pdfProcessor.processPdfFile(filePath);
 		pdfDocument.getPdfPageList().forEach(page -> {
@@ -55,19 +47,23 @@ public class PdfBarcodesProcessorImpl implements PdfBarcodesProcessor {
 	 */
 	private PdfPage processPage(PdfPage page) {
 		page.getImages().forEach(image -> {
-			BarcodeImage barcodeImage = this.imageProcessor.extractBarcodeImage(image);
-			String decodedBarcode = decodeImage(barcodeImage.getImage());
-			if (decodedBarcode == null) {
-				if (barcodeImage.isSkewed()) {
-					decodedBarcode = rotateImageUntilDecoded(barcodeImage.getImage(), (i) -> this.decodeImage(i));
-				} else {
-					BufferedImage rotatedImage = this.imageProcessor.rotateImage(barcodeImage.getImage(), 180);
-					decodedBarcode = decodeImage(rotatedImage);
-				}
-			}
-			page.getDecodedBarcodes().add(decodedBarcode);
+			List<BufferedImage> extractedImages = this.imageProcessor.extractBarcodeImages(image);
+			processExtractedImages(extractedImages,page);
 		});
 		return page;
+	}
+
+	private void processExtractedImages(List<BufferedImage> extractedImages, PdfPage page) {
+		extractedImages.forEach(image -> {
+			String decodedBarcode = decodeImage(image);
+			if (decodedBarcode == null) {
+				decodedBarcode = rotateImageUntilDecoded(image, (i) -> this.decodeImage(i));
+			}
+			if(decodedBarcode!=null) {
+				page.getDecodedBarcodeImageMap().put(decodedBarcode, image);
+			}
+		});
+
 	}
 
 	/**
@@ -81,7 +77,7 @@ public class PdfBarcodesProcessorImpl implements PdfBarcodesProcessor {
 		for (int angle = 0; angle <= 100; angle += 15) {
 			BufferedImage rotatedImage = this.imageProcessor.rotateImage(image, angle);
 			decodedBarcode = decodeFunction.apply(rotatedImage);
-			if ( !StringUtils.isEmpty(StringUtils.trim(decodedBarcode)) ) {
+			if (!StringUtils.isEmpty(StringUtils.trim(decodedBarcode))) {
 				return decodedBarcode;
 			}
 		}
@@ -97,7 +93,5 @@ public class PdfBarcodesProcessorImpl implements PdfBarcodesProcessor {
 		String decodedBarcode = barcodeDecoder.decode(bufferedImage);
 		return decodedBarcode;
 	}
-
-
 
 }

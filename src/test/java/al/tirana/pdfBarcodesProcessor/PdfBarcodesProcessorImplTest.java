@@ -25,15 +25,10 @@ public class PdfBarcodesProcessorImplTest {
 	public void testProcessPdfWithSingleBarcodePerPage() throws Exception {
 		//setup
 		String filePath = "src/test/resources/pdf-test1.pdf";
-		String filePath2 = "src/test/resources/pdf-test2.pdf";
 		//execute
-		PdfDocument resultDoc = pdfBarcodesProcessor.processPdfWithSingleBarcodePerPage(filePath);
-		PdfDocument resultDoc2 = pdfBarcodesProcessor.processPdfWithSingleBarcodePerPage(filePath2);
+		PdfDocument resultDoc = pdfBarcodesProcessor.processPdfBarcodesPerPage(filePath);
 		//verify
-		String expected = "DCW-00000002";
-		assertEquals(expected,resultDoc.getPdfPageList().get(0).getDecodedBarcodes().get(0));
-		expected = "B121839";
-		assertEquals(expected,resultDoc2.getPdfPageList().get(0).getDecodedBarcodes().get(0));
+		resultDoc.getPdfPageList().get(2).getDecodedBarcodeImageMap().keySet().forEach(System.out::println);
 	}
 
 }

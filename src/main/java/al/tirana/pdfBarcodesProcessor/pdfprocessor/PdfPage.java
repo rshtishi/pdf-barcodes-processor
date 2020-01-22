@@ -1,8 +1,9 @@
 package al.tirana.pdfBarcodesProcessor.pdfprocessor;
 
 import java.awt.image.BufferedImage;
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 
@@ -14,10 +15,10 @@ public class PdfPage {
 	private int pageNumber;
 	private List<BufferedImage> images;
 	private String pageName;
-	private List<String> decodedBarcodes;
+	private Map<String, BufferedImage> decodedBarcodeImageMap;
 
-	public List<String> getDecodedBarcodes() {
-		return decodedBarcodes;
+	public Map<String, BufferedImage> getDecodedBarcodeImageMap() {
+		return decodedBarcodeImageMap;
 	}
 
 	public int getPageNumber() {
@@ -61,7 +62,7 @@ public class PdfPage {
 			pdfPage.pageNumber = this.pageNumber;
 			pdfPage.pageName = this.pageName;
 			pdfPage.images = this.images;
-			pdfPage.decodedBarcodes = new ArrayList<>();
+			pdfPage.decodedBarcodeImageMap = new HashMap<>();
 			return pdfPage;
 		}
 	}
