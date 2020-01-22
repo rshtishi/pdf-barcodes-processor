@@ -87,7 +87,7 @@ public class OpenCVImageProcessor implements ImageProcessor {
 	 * Implemented using the OpenCV library.
 	 */
 	@Override
-	public BarcodeImage extractBarcodeImage(BufferedImage image) {
+	public BufferedImage extractBarcodeImage(BufferedImage image) {
 		Mat imageMat = OpenCVHelper.img2Mat(image);
 		Mat greyMat = new Mat();
 		Imgproc.cvtColor(imageMat, greyMat, Imgproc.COLOR_BGR2GRAY);
@@ -112,14 +112,11 @@ public class OpenCVImageProcessor implements ImageProcessor {
 		Imgproc.findContours(closedMat.clone(), contours, new Mat(), Imgproc.RETR_EXTERNAL,
 				Imgproc.CHAIN_APPROX_SIMPLE);
 		Rect cropRect = OpenCVHelper.estimateCropRect(contours, imageMat);
-
-		boolean skewed = false;
 		if (!OpenCVHelper.validateCropRect(cropRect, imageMat)) {
 			cropRect = OpenCVHelper.fixCropRect(cropRect, imageMat);
-			skewed = true;
 		}
 		Mat cropMat = new Mat(imageMat, cropRect);
-		return new BarcodeImage(OpenCVHelper.mat2Img(cropMat), skewed);
+		return OpenCVHelper.mat2Img(cropMat);
 	}
 
 	/**

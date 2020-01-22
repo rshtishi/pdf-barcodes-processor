@@ -46,7 +46,7 @@ public interface ImageProcessor {
 	 * @param image
 	 * @return
 	 */
-	BarcodeImage extractBarcodeImage(BufferedImage image);
+	BufferedImage extractBarcodeImage(BufferedImage image);
 
 	/**
 	 * Rotates the image to a specific angle.

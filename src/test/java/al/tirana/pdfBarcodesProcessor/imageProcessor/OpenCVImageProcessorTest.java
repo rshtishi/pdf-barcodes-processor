@@ -159,9 +159,9 @@ public class OpenCVImageProcessorTest {
 		String imagePath = "src/test/resources/img-test1.png";
 		BufferedImage image = ImageIO.read(new File(imagePath));
 		// execute
-		BarcodeImage imageResult = imageProcessor.extractBarcodeImage(image);
+		BufferedImage imageResult = imageProcessor.extractBarcodeImage(image);
 		// verify
-		ImageIO.write(imageResult.getImage(), "jpg", new File("src/test/resources/img-barcode-extracted1.jpg"));
+		ImageIO.write(imageResult, "jpg", new File("src/test/resources/img-barcode-extracted1.jpg"));
 	}
 	
 	/**
@@ -175,9 +175,9 @@ public class OpenCVImageProcessorTest {
 		String imagePath = "src/test/resources/img-test2.jpg";
 		BufferedImage image = ImageIO.read(new File(imagePath));
 		// execute
-		BarcodeImage imageResult = imageProcessor.extractBarcodeImage(image);
+		BufferedImage imageResult = imageProcessor.extractBarcodeImage(image);
 		// verify
-		ImageIO.write(imageResult.getImage(), "jpg", new File("src/test/resources/img-barcode-extracted2.jpg"));
+		ImageIO.write(imageResult, "jpg", new File("src/test/resources/img-barcode-extracted2.jpg"));
 	}
 	
 	/**
@@ -191,25 +191,11 @@ public class OpenCVImageProcessorTest {
 		String imagePath = "src/test/resources/img-test3.jpg";
 		BufferedImage image = ImageIO.read(new File(imagePath));
 		// execute
-		BarcodeImage imageResult = imageProcessor.extractBarcodeImage(image);
+		BufferedImage imageResult = imageProcessor.extractBarcodeImage(image);
 		// verify
-		ImageIO.write(imageResult.getImage(), "jpg", new File("src/test/resources/img-barcode-extracted3.jpg"));
+		ImageIO.write(imageResult, "jpg", new File("src/test/resources/img-barcode-extracted3.jpg"));
 	}
 	
-	/**
-	 * Testing the extraction of bar code image from an image containing single bar code inside.
-	 * @throws Exception
-	 */
-	@Test
-	public void test4ExtractBarcodeImage() throws Exception {
-		// setup
-		String imagePath = "src/test/resources/img-barcode-extracted-opencv-6.jpg";
-		BufferedImage image = ImageIO.read(new File(imagePath));
-		// execute
-		BarcodeImage imageResult = imageProcessor.extractBarcodeImage(image);
-		// verify
-		ImageIO.write(imageResult.getImage(), "jpg", new File("src/test/resources/img-barcode-extracted4.jpg"));
-	}
 
 	/**
 	 * Testing the rotation of an image.
