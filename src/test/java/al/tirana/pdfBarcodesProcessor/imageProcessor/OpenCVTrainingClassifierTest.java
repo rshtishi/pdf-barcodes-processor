@@ -35,7 +35,6 @@ public class OpenCVTrainingClassifierTest {
 	private String negImagesPath = "/home/rando/Pictures/opencv/neg";
 	private String parentDirPath = "/home/rando/Pictures/opencv/";
 
-
 	private int[][] coord = { { 0, 0, 70, 10 }, { 15, 10, 70, 10 }, { 5, 15, 70, 10 }, { 10, 25, 70, 10 } };
 	private String[] bgImages = { "src/test/resources/opencv/document1.jpg", "src/test/resources/opencv/document2.jpg",
 			"src/test/resources/opencv/document3.jpg", "src/test/resources/opencv/document4.png",
@@ -47,8 +46,9 @@ public class OpenCVTrainingClassifierTest {
 			BarcodeFormat.UPC_E };
 
 	/**
+	 * Generating the information need to run the classifier.
 	 * 
-	 * @throws Exception Generating the information need to run the classifier.
+	 * @throws Exception
 	 */
 	@Before
 	public void setup() throws Exception {
@@ -65,18 +65,25 @@ public class OpenCVTrainingClassifierTest {
 	 * generate negative images,positive images ,pos.info,neg.info, pos.vec train
 	 * the classifier with opencv
 	 */
-	//@Test
+	@Test
 	public void trainClassifier() {
-		//TO DO
-		//Generate Vec File
-		//Run the train process
+		// STEP 1
+		// opencv_createsamples -info barcodes.info -num 9332 -w 100 -h 40 -vec
+		// barcodes.vec
+		// STEP 2
+		// opencv_createsamples -vec barcodes.vec -w 100 -h 40
+		// STEP 3
+		// opencv_traincascade -data data -vec barcodes.vec -bg bg.txt -numPos 200
+		// -numNeg 100 -numStages 8 -minHitRate 0.8 -maxFalseAlarmRate 0.5 -w 100 -h 40
+		// -featureType LBP
 	}
 
-
 	/**
+	 * Generate the directory containing images with bar codes that are going to be
+	 * used to train the classifier.
+	 * 
 	 * @return
-	 * @throws Exception Generate the directory containing images with bar codes
-	 *                   that are going to be used to train the classifier.
+	 * @throws Exception
 	 */
 	private File generatePosDir() throws Exception {
 		File posImagesDir = new File(posImagesPath);
@@ -233,13 +240,14 @@ public class OpenCVTrainingClassifierTest {
 				Mat imageMat = Highgui.imread(imageFile.getAbsolutePath());
 				Size size = new Size(100, 40);
 				Imgproc.resize(imageMat, imageMat, size);
-				//rename
+				// rename
 				String newFilePath = negImagesPath + "/" + imageFile.getName();
 				String[] nameArr = imageFile.getName().split("\\.");
 				int last = nameArr.length - 1;
 				String fileType = nameArr[last];
 				File newFile = new File(newFilePath);
-				if (!newFile.exists()) {;
+				if (!newFile.exists()) {
+					;
 					Highgui.imwrite(newFile.getAbsolutePath(), imageMat);
 				}
 			}
