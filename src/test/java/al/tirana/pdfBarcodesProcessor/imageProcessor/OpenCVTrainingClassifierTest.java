@@ -18,7 +18,6 @@ import org.opencv.imgproc.Imgproc;
 
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.MultiFormatWriter;
-import com.google.zxing.WriterException;
 import com.google.zxing.client.j2se.MatrixToImageWriter;
 import com.google.zxing.common.BitMatrix;
 
@@ -35,7 +34,7 @@ public class OpenCVTrainingClassifierTest {
 	private String posImagesPath = "/home/rando/Pictures/opencv/pos";
 	private String negImagesPath = "/home/rando/Pictures/opencv/neg";
 	private String parentDirPath = "/home/rando/Pictures/opencv/";
-	private ImageProcessor imageProcessor;
+
 
 	private int[][] coord = { { 0, 0, 70, 10 }, { 15, 10, 70, 10 }, { 5, 15, 70, 10 }, { 10, 25, 70, 10 } };
 	private String[] bgImages = { "src/test/resources/opencv/document1.jpg", "src/test/resources/opencv/document2.jpg",
@@ -54,7 +53,6 @@ public class OpenCVTrainingClassifierTest {
 	@Before
 	public void setup() throws Exception {
 		OpenCV.loadLibrary();
-		imageProcessor = new OpenCVImageProcessor();
 		File posImagesDir = generatePosDir();
 		generatePosInfoFile(posImagesDir);
 		generateNegImages();
@@ -67,7 +65,7 @@ public class OpenCVTrainingClassifierTest {
 	 * generate negative images,positive images ,pos.info,neg.info, pos.vec train
 	 * the classifier with opencv
 	 */
-	@Test
+	//@Test
 	public void trainClassifier() {
 		//TO DO
 		//Generate Vec File
@@ -228,27 +226,20 @@ public class OpenCVTrainingClassifierTest {
 	 * @throws IOException
 	 */
 	private void generateNegImages() throws IOException {
-		imageProcessor = new OpenCVImageProcessor();
 		File imagesDir = new File(this.imagesPath);
 		if (imagesDir.exists()) {
 			for (File imageFile : imagesDir.listFiles()) {
-//				BufferedImage image = ImageIO.read(imageFile);
-//				if (image.getWidth() < image.getHeight()) {
-//					image = this.imageProcessor.rotateImage(image, 90);
-//				}
 				// resize
 				Mat imageMat = Highgui.imread(imageFile.getAbsolutePath());
 				Size size = new Size(100, 40);
 				Imgproc.resize(imageMat, imageMat, size);
-				//image = OpenCVHelper.mat2Img(imageMat);
-				// end resize
+				//rename
 				String newFilePath = negImagesPath + "/" + imageFile.getName();
 				String[] nameArr = imageFile.getName().split("\\.");
 				int last = nameArr.length - 1;
 				String fileType = nameArr[last];
 				File newFile = new File(newFilePath);
-				if (!newFile.exists()) {
-					//ImageIO.write(image, fileType, newFile);
+				if (!newFile.exists()) {;
 					Highgui.imwrite(newFile.getAbsolutePath(), imageMat);
 				}
 			}
