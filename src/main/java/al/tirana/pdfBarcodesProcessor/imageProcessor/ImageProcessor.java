@@ -30,7 +30,7 @@ public interface ImageProcessor {
 
 	/**
 	 * It crop all area where bar code images are located and returns the list of
-	 * bar code images. To be used when image might have more that one image.
+	 * bar code images. To be used when image might have more that one bar code.
 	 * 
 	 * @param image
 	 * @return
@@ -38,8 +38,8 @@ public interface ImageProcessor {
 	List<BufferedImage> extractBarcodeImages(BufferedImage image);
 
 	/**
-	 * It crop are where the bar code image is located. It return the bar code image
-	 * along with information if the bar code image is skewed. If it is not skewed
+	 * It crop the area  where the bar code image is located. It return the bar code image
+	 * along with the information if the bar code image is skewed. If it is not skewed
 	 * no rotation it is need or 180 degree rotation it is needed. If it is skewed ,
 	 * it is need to try rotating with different angles.
 	 * 
