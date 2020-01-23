@@ -36,7 +36,7 @@ public class OpenCVImageProcessor implements ImageProcessor {
 		this.barcodeRatioWidth = 0.5;
 		this.barcodeRatioHeight = 0.5;
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -46,7 +46,7 @@ public class OpenCVImageProcessor implements ImageProcessor {
 		this.barcodeRatioHeight = ratio;
 
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -72,10 +72,13 @@ public class OpenCVImageProcessor implements ImageProcessor {
 		int height = (int) Math.round(this.barcodeRatioHeight * imageMat.rows());
 		classifier.detectMultiScale(imageMat, barcodeDetections, 1.1, 2, 0 | Objdetect.CASCADE_SCALE_IMAGE,
 				new Size(width, height), new Size());
-		//cropping the barcodes surface
+		// cropping the barcodes surface
 		List<BufferedImage> imageList = new ArrayList<>();
 		for (Rect rect : barcodeDetections.toArray()) {
-			Mat croppedImageMat = new Mat(imageMat,rect);
+			//extending the size of crop area
+			rect.width += (imageMat.width() - (rect.width + rect.x));
+			rect.height += (imageMat.height() - (rect.height + rect.y));
+			Mat croppedImageMat = new Mat(imageMat, rect);
 			imageList.add(OpenCVHelper.mat2Img(croppedImageMat));
 		}
 		return imageList;

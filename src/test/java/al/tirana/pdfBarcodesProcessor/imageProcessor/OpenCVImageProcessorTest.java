@@ -49,7 +49,7 @@ public class OpenCVImageProcessorTest {
 	@Test
 	public void test1ExtractBarcodeImages() throws Exception {
 		// setup
-		String imagePath = "src/test/resources/img-test1.png";
+		String imagePath = "src/test/resources/img-test1.jpg";
 		BufferedImage image = ImageIO.read(new File(imagePath));
 		// execute
 		imageProcessor.setBarcodeRatioToImage(0.7, 0.3);
@@ -156,7 +156,7 @@ public class OpenCVImageProcessorTest {
 	@Test
 	public void test1ExtractBarcodeImage() throws Exception {
 		// setup
-		String imagePath = "src/test/resources/img-test1.png";
+		String imagePath = "src/test/resources/img-test1.jpg";
 		BufferedImage image = ImageIO.read(new File(imagePath));
 		// execute
 		BufferedImage imageResult = imageProcessor.extractBarcodeImage(image);
@@ -198,27 +198,40 @@ public class OpenCVImageProcessorTest {
 	
 
 	/**
-	 * Testing the rotation of an image.
+	 * Testing the rotation of an image 1.
 	 * 
 	 * @throws Exception
 	 */
 	@Test
-	public void testRotateImage() throws Exception {
+	public void test1RotateImage() throws Exception {
 		// setup
-		String imagePath1 = "src/test/resources/img-test1.png";
-		String imagePath2 = "src/test/resources/img-test2.jpg";
+		String imagePath1 = "src/test/resources/img-test1.jpg";
 		BufferedImage image1 = ImageIO.read(new File(imagePath1));
+		// execute
+		BufferedImage imageResult1 = imageProcessor.rotateImage(image1, 10);
+		// verify
+		ImageIO.write(imageResult1, "jpg", new File("src/test/resources/img-rotated-10.jpg"));
+		String expected = "9109342584073898002361401267";
+		assertEquals(expected,decoder.decode(imageResult1));
+	}
+	
+	/**
+	 * Testing the rotation of an image 2.
+	 * 
+	 * @throws Exception
+	 */
+	@Test
+	public void test2RotateImage() throws Exception {
+		// setup
+		String imagePath2 = "src/test/resources/img-test2.jpg";
 		BufferedImage image2 = ImageIO.read(new File(imagePath2));
 		// execute
-		BufferedImage imageResult1 = imageProcessor.rotateImage(image1, 50);
 		BufferedImage imageResult2 = imageProcessor.rotateImage(image2, 100);
 		// verify
-		ImageIO.write(imageResult1, "jpg", new File("src/test/resources/img-rotated-50.jpg"));
-		String expected = "B121839";
-		assertEquals(expected, decoder.decode(imageResult1));
 		ImageIO.write(imageResult2, "jpg", new File("src/test/resources/img-rotated-100.jpg"));
-		expected = "Seite5";
+		String expected = "Seite5";
 		assertEquals(expected, decoder.decode(imageResult2));
 	}
+	
 
 }
