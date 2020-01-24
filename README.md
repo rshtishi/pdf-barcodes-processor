@@ -68,7 +68,7 @@ pdf-barcodes-processor inlcudes the following dependencies:
   better classifier with a larger subset of data. OpenCv i have used also to perform operation on the image like cropping an area
   or rotating an images. 
   
-  ####ZXING
+  #### ZXING
   I have used zxing library to decode the barcode images. It is the best option for open source barcode decoder libraies t'ill now.
   
   
