@@ -15,7 +15,7 @@ import al.tirana.pdfBarcodesProcessor.pdfprocessor.PdfProcessor;
 import nu.pattern.OpenCV;
 
 public class OpenCVHelperTest {
-	
+
 	@Before
 	public void setup() throws Exception {
 		OpenCV.loadLibrary();
@@ -23,26 +23,26 @@ public class OpenCVHelperTest {
 
 	@Test
 	public void img2MatTest() throws Exception {
-		//setup
+		// setup
 		String filePath = "src/test/resources/pdf-test1.pdf";
 		PdfProcessor pdfProcessor = new PdfBoxPdfProcessor();
 		PdfDocument pdfDocument = pdfProcessor.processPdfFile(filePath);
 		BufferedImage tstImage = pdfDocument.getPdfPageList().get(0).getImages().get(0);
-		//execute
+		// execute
 		Mat imageMat = OpenCVHelper.img2Mat(tstImage);
-		//verify
+		// verify
 		assertEquals(tstImage.getWidth(), imageMat.width());
-		assertEquals(tstImage.getHeight(),imageMat.height());
+		assertEquals(tstImage.getHeight(), imageMat.height());
 	}
-	
+
 	@Test
 	public void mat2ImgTest() {
-		//setup
+		// setup
 		String filePath = "src/test/resources/img-test1.png";
 		Mat tstImageMat = Highgui.imread(filePath);
-		//execute
+		// execute
 		BufferedImage image = OpenCVHelper.mat2Img(tstImageMat);
-		//verify
+		// verify
 		assertEquals(tstImageMat.width(), image.getWidth());
 		assertEquals(tstImageMat.height(), image.getHeight());
 	}

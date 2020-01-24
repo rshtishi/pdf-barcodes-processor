@@ -78,7 +78,7 @@ public class PdfBarcodesProcessorImpl implements PdfBarcodesProcessor {
 	}
 
 	/**
-	 * Process the images of the pdf page and adds the decoded bar codes.
+	 * Process the images of the pdf page and extract the bar codes images from the pdf page.
 	 * 
 	 * @param page
 	 * @return
@@ -92,6 +92,8 @@ public class PdfBarcodesProcessorImpl implements PdfBarcodesProcessor {
 	}
 	
 	/**
+	 * Process the extracted bar code images and decodes the bar code images. 
+	 * And if the bar code is decoded, add the bar code image and decoded text in pdf page.
 	 * 
 	 * @param extractedImages
 	 * @param page

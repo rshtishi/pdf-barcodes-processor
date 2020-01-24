@@ -1,27 +1,15 @@
 package al.tirana.pdfBarcodesProcessor.imageProcessor;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
 
-import java.awt.geom.AffineTransform;
-import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.imageio.ImageIO;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.opencv.core.Core;
-import org.opencv.core.CvType;
-import org.opencv.core.Mat;
-import org.opencv.core.MatOfPoint;
-import org.opencv.core.Rect;
-import org.opencv.core.Size;
-import org.opencv.imgproc.Imgproc;
 
 import al.tirana.pdfBarcodesProcessor.barcodeDecoder.ZxingBarcodeDecoder;
 
@@ -42,7 +30,8 @@ public class OpenCVImageProcessorTest {
 	}
 
 	/**
-	 * Testing extraction of bar code images with input being a  image containing a bar code not aligned.
+	 * Testing extraction of bar code images with input being a image containing a
+	 * bar code not aligned.
 	 * 
 	 * @throws Exception
 	 */
@@ -57,9 +46,10 @@ public class OpenCVImageProcessorTest {
 		// verify
 		ImageIO.write(imageListResult.get(0), "jpg", new File("src/test/resources/img-barcode-extracted-opencv-1.jpg"));
 	}
-	
+
 	/**
-	 * Testing the extraction  of bar code images with input being an image containing a bar code aligned vertically.
+	 * Testing the extraction of bar code images with input being an image
+	 * containing a bar code aligned vertically.
 	 * 
 	 * @throws Exception
 	 */
@@ -70,13 +60,14 @@ public class OpenCVImageProcessorTest {
 		BufferedImage image = ImageIO.read(new File(imagePath));
 		// execute
 		imageProcessor.setBarcodeRatioToImage(0.7, 0.3);
-		List<BufferedImage>  imageListResult = imageProcessor.extractBarcodeImages(image);
+		List<BufferedImage> imageListResult = imageProcessor.extractBarcodeImages(image);
 		// verify
 		ImageIO.write(imageListResult.get(0), "jpg", new File("src/test/resources/img-barcode-extracted-opencv-2.jpg"));
 	}
-	
+
 	/**
-	 * Testing the extraction of bar code images with input being an image containing a bar code aligned horizontally.
+	 * Testing the extraction of bar code images with input being an image
+	 * containing a bar code aligned horizontally.
 	 * 
 	 * @throws Exception
 	 */
@@ -89,11 +80,12 @@ public class OpenCVImageProcessorTest {
 		imageProcessor.setBarcodeRatioToImage(0.7, 0.3);
 		List<BufferedImage> imageListResult = imageProcessor.extractBarcodeImages(image);
 		// verify
-		ImageIO.write(imageListResult.get(0), "jpg", new File("src/test/resources/img-barcode-extracted-opencv-3.jpg"));		
+		ImageIO.write(imageListResult.get(0), "jpg", new File("src/test/resources/img-barcode-extracted-opencv-3.jpg"));
 	}
-	
+
 	/**
-	 * Testing the extraction of bar code images with input being an image containing small bar code inside document.
+	 * Testing the extraction of bar code images with input being an image
+	 * containing small bar code inside document.
 	 * 
 	 * @throws Exception
 	 */
@@ -106,12 +98,12 @@ public class OpenCVImageProcessorTest {
 		imageProcessor.setBarcodeRatioToImage(0.9, 0.5);
 		List<BufferedImage> imageListResult = imageProcessor.extractBarcodeImages(image);
 		// verify
-		ImageIO.write(imageListResult.get(0), "jpg", new File("src/test/resources/img-barcode-extracted-opencv-4.jpg"));		
+		ImageIO.write(imageListResult.get(0), "jpg", new File("src/test/resources/img-barcode-extracted-opencv-4.jpg"));
 	}
-	
-	
+
 	/**
-	 * Testing the extraction of bar code images with input being an image that has no bar codes.
+	 * Testing the extraction of bar code images with input being an image that has
+	 * no bar codes.
 	 * 
 	 * @throws Exception
 	 */
@@ -127,9 +119,10 @@ public class OpenCVImageProcessorTest {
 		int expected = 0;
 		assertEquals(expected, imageListResult.size());
 	}
-	
+
 	/**
-	 * Testing the extraction of bar code images with input being an image that has a bar code located in top of document.
+	 * Testing the extraction of bar code images with input being an image that has
+	 * a bar code located in top of document.
 	 * 
 	 * @throws Exception
 	 */
@@ -142,14 +135,12 @@ public class OpenCVImageProcessorTest {
 		imageProcessor.setBarcodeRatioToImage(0.45, 0.15);
 		List<BufferedImage> imageListResult = imageProcessor.extractBarcodeImages(image);
 		// verify
-		ImageIO.write(imageListResult.get(0), "jpg", new File("src/test/resources/img-barcode-extracted-opencv-6.jpg"));	
+		ImageIO.write(imageListResult.get(0), "jpg", new File("src/test/resources/img-barcode-extracted-opencv-6.jpg"));
 	}
-	
-
 
 	/**
-	 * Testing the extraction of bar code image from an image containing a single bar code that is displaced.
-	 * code.
+	 * Testing the extraction of bar code image from an image containing a single
+	 * bar code that is displaced. code.
 	 * 
 	 * @throws Exception
 	 */
@@ -163,9 +154,10 @@ public class OpenCVImageProcessorTest {
 		// verify
 		ImageIO.write(imageResult, "jpg", new File("src/test/resources/img-barcode-extracted1.jpg"));
 	}
-	
+
 	/**
-	 * Testing the extraction of bar code image from an image containing a single bar code that is vertically aligned.
+	 * Testing the extraction of bar code image from an image containing a single
+	 * bar code that is vertically aligned.
 	 * 
 	 * @throws Exception
 	 */
@@ -179,9 +171,10 @@ public class OpenCVImageProcessorTest {
 		// verify
 		ImageIO.write(imageResult, "jpg", new File("src/test/resources/img-barcode-extracted2.jpg"));
 	}
-	
+
 	/**
-	 * Testing the extraction of bar code image from an image containing a single bar code that is horizontally aligned. 
+	 * Testing the extraction of bar code image from an image containing a single
+	 * bar code that is horizontally aligned.
 	 * 
 	 * @throws Exception
 	 */
@@ -195,7 +188,6 @@ public class OpenCVImageProcessorTest {
 		// verify
 		ImageIO.write(imageResult, "jpg", new File("src/test/resources/img-barcode-extracted3.jpg"));
 	}
-	
 
 	/**
 	 * Testing the rotation of an image 1.
@@ -212,9 +204,9 @@ public class OpenCVImageProcessorTest {
 		// verify
 		ImageIO.write(imageResult1, "jpg", new File("src/test/resources/img-rotated-10.jpg"));
 		String expected = "9109342584073898002361401267";
-		assertEquals(expected,decoder.decode(imageResult1));
+		assertEquals(expected, decoder.decode(imageResult1));
 	}
-	
+
 	/**
 	 * Testing the rotation of an image 2.
 	 * 
@@ -232,6 +224,5 @@ public class OpenCVImageProcessorTest {
 		String expected = "Seite5";
 		assertEquals(expected, decoder.decode(imageResult2));
 	}
-	
 
 }

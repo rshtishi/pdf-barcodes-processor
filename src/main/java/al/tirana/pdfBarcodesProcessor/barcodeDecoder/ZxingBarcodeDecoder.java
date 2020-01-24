@@ -20,7 +20,9 @@ import com.google.zxing.common.HybridBinarizer;
 public class ZxingBarcodeDecoder implements BarcodeDecoder {
 
 	/**
-	 * {@inheritDoc} Implemented using Zxing library.
+	 * Implemented using Zxing library.
+	 * 
+	 * {@inheritDoc}
 	 */
 	@Override
 	public String decode(BufferedImage image, ZxingDecoderType type) {
@@ -38,7 +40,9 @@ public class ZxingBarcodeDecoder implements BarcodeDecoder {
 	}
 
 	/**
-	 * {@inheritDoc} Implemented using Zxing library.
+	 * Implemented using Zxing library.
+	 * 
+	 * {@inheritDoc}
 	 */
 	@Override
 	public String decode(BufferedImage image) {

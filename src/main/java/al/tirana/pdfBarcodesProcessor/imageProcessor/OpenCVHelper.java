@@ -25,7 +25,7 @@ public class OpenCVHelper {
 	 * The Mat type image is converted to BufferedImage type.
 	 * 
 	 * @param mat
-	 * @return 
+	 * @return
 	 */
 	public static BufferedImage mat2Img(Mat mat) {
 		BufferedImage image = new BufferedImage(mat.width(), mat.height(), BufferedImage.TYPE_3BYTE_BGR);
@@ -40,7 +40,7 @@ public class OpenCVHelper {
 	 * The BufferedImage type image is converted to Mat type.
 	 * 
 	 * @param image
-	 * @return 
+	 * @return
 	 */
 	public static Mat img2Mat(BufferedImage image) {
 		image = convertTo3ByteBGRType(image);
@@ -64,11 +64,12 @@ public class OpenCVHelper {
 	}
 
 	/**
+	 * Estimates the crop area and return a rectangle area. This rectangle area is
+	 * area that will be cropped from the image.
 	 * 
 	 * @param contours
 	 * @param imageMat
-	 * @return Estimates the crop area and return a rectangle area. This rectangle
-	 *         area is area that will be cropped from the image.
+	 * @return
 	 */
 	public static Rect estimateCropRect(List<MatOfPoint> contours, Mat imageMat) {
 		double maxArea = 0;
@@ -88,10 +89,11 @@ public class OpenCVHelper {
 	}
 
 	/**
+	 * Validates the crop area goes outside of boundary of image.
 	 * 
 	 * @param cropRect
 	 * @param imageMat
-	 * @return Validates the crop area goes outside of boundary of image.
+	 * @return
 	 */
 	public static boolean validateCropRect(Rect cropRect, Mat imageMat) {
 		boolean validation = true;
@@ -107,10 +109,11 @@ public class OpenCVHelper {
 	}
 
 	/**
+	 * Fixes the crop area if it goes outside the boundary of image.
 	 * 
 	 * @param cropRect
 	 * @param imageMat
-	 * @return Fixes the crop area if it goes outside the boundary of image.
+	 * @return
 	 */
 	public static Rect fixCropRect(Rect cropRect, Mat imageMat) {
 		if (cropRect.x < 0)

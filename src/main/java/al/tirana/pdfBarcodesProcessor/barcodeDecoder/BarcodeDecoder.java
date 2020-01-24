@@ -10,17 +10,21 @@ import java.awt.image.BufferedImage;
 public interface BarcodeDecoder {
 
 	/**
+	 * Decodes a bar code images which type is known.
+	 * 
 	 * @param image
 	 * @param type
 	 * @return
-	 * @throws Exception Decodes a bar code images which type is known.
+	 * @throws Exception
 	 */
 	public String decode(BufferedImage image, ZxingDecoderType type);
 
 	/**
+	 * Decodes bar code images which type is unknown.
+	 * 
 	 * @param image
 	 * @return
-	 * @throws Exception Decodes bar code images which type is unknown.
+	 * @throws Exception
 	 */
 	public String decode(BufferedImage image);
 

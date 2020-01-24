@@ -25,7 +25,7 @@ public class PdfPage {
 	public Map<String, BufferedImage> getDecodedBarcodeImageMap() {
 		return decodedBarcodeImageMap;
 	}
-	
+
 	private PdfPage() {
 	}
 
@@ -40,38 +40,41 @@ public class PdfPage {
 	public String getPageName() {
 		return pageName;
 	}
-	
+
 	/**
 	 * Returns the list with all images that are decoded.
+	 * 
 	 * @return
 	 */
-	public List<BufferedImage> getAllDecodedBarcodeImages(){
+	public List<BufferedImage> getAllDecodedBarcodeImages() {
 		return new ArrayList<>(decodedBarcodeImageMap.values());
 	}
-	
+
 	/**
 	 * Returns the list with all text from decoded bar codes
+	 * 
 	 * @return
 	 */
-	public List<String> getAllDecodedBarcodesList(){
+	public List<String> getAllDecodedBarcodesList() {
 		return new ArrayList<>(decodedBarcodeImageMap.keySet());
 	}
-	
+
 	/**
 	 * Saves all decoded bar codes images inside a directory specified in parameter,
 	 * where image name is bar code decoded text.
+	 * 
 	 * @param dirPath
 	 */
 	public void saveDecodedBarcodeImages(String dirPath) {
 		decodedBarcodeImageMap.keySet().forEach(name -> {
-			String filePath = dirPath+"/"+name+".jpg";
+			String filePath = dirPath + "/" + name + ".jpg";
 			BufferedImage image = decodedBarcodeImageMap.get(name);
 			try {
 				ImageIO.write(image, "png", new File(filePath));
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-			
+
 		});
 	}
 

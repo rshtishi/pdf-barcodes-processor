@@ -14,39 +14,39 @@ import org.junit.Before;
 import org.junit.Test;
 
 public class PdfPageTest {
-	
+
 	private PdfPage pdfPage;
-	
+
 	@Before()
 	public void setup() throws IOException {
-		pdfPage =new PdfPage.Builder().build();
+		pdfPage = new PdfPage.Builder().build();
 		BufferedImage image = ImageIO.read(new File("src/test/resources/img-test1.jpg"));
 		pdfPage.getDecodedBarcodeImageMap().put("test", image);
 	}
 
 	@Test
 	public void testSaveDecodedBarcodeImages() {
-		//execute
+		// execute
 		pdfPage.saveDecodedBarcodeImages("src/test/resources");
-		//verify
+		// verify
 		File file = new File("src/test/resources/test.jpg");
 		assertTrue(file.exists());
 	}
-	
+
 	@Test
 	public void testGetAllDecodedBarcodeImages() {
-		//execute
+		// execute
 		List<BufferedImage> images = pdfPage.getAllDecodedBarcodeImages();
-		//verify
+		// verify
 		int expected = 1;
 		assertEquals(expected, images.size());
 	}
-	
+
 	@Test
 	public void testGetAllDecodedBarcodesList() {
-		//execute
+		// execute
 		List<BufferedImage> decodedBarcodes = pdfPage.getAllDecodedBarcodeImages();
-		//verify
+		// verify
 		int expected = 1;
 		assertEquals(expected, decodedBarcodes.size());
 	}

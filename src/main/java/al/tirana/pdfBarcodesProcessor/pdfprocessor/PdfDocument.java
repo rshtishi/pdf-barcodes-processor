@@ -23,6 +23,10 @@ public class PdfDocument {
 		return pdfPageList;
 	}
 
+	public void saveAllDecodedBarcodeImages(String dirPath) {
+		pdfPageList.forEach(page -> page.saveDecodedBarcodeImages(dirPath));
+	}
+
 	public static class Builder {
 
 		private int totalPages;
