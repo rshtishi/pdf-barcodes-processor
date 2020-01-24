@@ -1,6 +1,6 @@
 package al.tirana.pdfBarcodesProcessor;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -18,7 +18,7 @@ public class PdfBarcodesProcessorImplTest {
 	
 	@Before
 	public void setup() {
-		pdfBarcodesProcessor = new PdfBarcodesProcessorImpl();
+		pdfBarcodesProcessor = new PdfBarcodesProcessorImpl.Builder().build();
 	}
 	
 	@Test
@@ -28,7 +28,10 @@ public class PdfBarcodesProcessorImplTest {
 		//execute
 		PdfDocument resultDoc = pdfBarcodesProcessor.processPdfBarcodesPerPage(filePath);
 		//verify
-		resultDoc.getPdfPageList().get(2).getDecodedBarcodeImageMap().keySet().forEach(System.out::println);
+		String expectedPage1 = "100000000003";
+		String expectedPage2 = "9109342584073898002361401267";
+		assertTrue(resultDoc.getPdfPageList().get(0).getDecodedBarcodeImageMap().keySet().contains(expectedPage1));
+		assertTrue(resultDoc.getPdfPageList().get(1).getDecodedBarcodeImageMap().keySet().contains(expectedPage2));
 	}
 
 }

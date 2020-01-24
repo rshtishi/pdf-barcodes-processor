@@ -22,10 +22,47 @@ import al.tirana.pdfBarcodesProcessor.pdfprocessor.PdfProcessor;
  */
 public class PdfBarcodesProcessorImpl implements PdfBarcodesProcessor {
 
-	ImageProcessor imageProcessor;
+	private PdfProcessor pdfProcessor;
+	private ImageProcessor imageProcessor;
+	private BarcodeDecoder barcodeDecoder;
 
-	public PdfBarcodesProcessorImpl() {
-		this.imageProcessor = new OpenCVImageProcessor();
+	private PdfBarcodesProcessorImpl() {
+	}
+	
+	public static class Builder {
+		
+		private ImageProcessor imageProcessor;
+		private BarcodeDecoder barcodeDecoder;
+		private PdfProcessor pdfProcessor;
+		
+		public Builder() {
+			this.pdfProcessor = new PdfBoxPdfProcessor();
+			this.imageProcessor = new OpenCVImageProcessor();
+			this.barcodeDecoder = new ZxingBarcodeDecoder();
+		}
+
+		public Builder pdfProcessor(PdfProcessor pdfProcessor) {
+			this.pdfProcessor = pdfProcessor;
+			return this;
+		}
+		
+		public Builder imageProcessor(ImageProcessor imageProcessor) {
+			this.imageProcessor = new OpenCVImageProcessor();
+			return this;
+		}
+		
+		public Builder barcodeDecoder(BarcodeDecoder barcodeDecoder) {
+			this.barcodeDecoder = barcodeDecoder;
+			return this;
+		}
+		
+		public PdfBarcodesProcessorImpl build() {
+			PdfBarcodesProcessorImpl pdfProcessor = new PdfBarcodesProcessorImpl();
+			pdfProcessor.pdfProcessor = this.pdfProcessor;
+			pdfProcessor.imageProcessor = this.imageProcessor;
+			pdfProcessor.barcodeDecoder = this.barcodeDecoder;
+			return pdfProcessor;
+		}
 	}
 
 	/**
@@ -33,8 +70,7 @@ public class PdfBarcodesProcessorImpl implements PdfBarcodesProcessor {
 	 */
 	@Override
 	public PdfDocument processPdfBarcodesPerPage(String filePath) throws Exception {
-		PdfProcessor pdfProcessor = new PdfBoxPdfProcessor();
-		PdfDocument pdfDocument = pdfProcessor.processPdfFile(filePath);
+		PdfDocument pdfDocument = this.pdfProcessor.processPdfFile(filePath);
 		pdfDocument.getPdfPageList().forEach(page -> {
 			page = processPage(page);
 		});
@@ -42,35 +78,44 @@ public class PdfBarcodesProcessorImpl implements PdfBarcodesProcessor {
 	}
 
 	/**
+	 * Process the images of the pdf page and adds the decoded bar codes.
+	 * 
 	 * @param page
-	 * @return Process the images of the pdf page and adds the decoded bar codes.
+	 * @return
 	 */
 	private PdfPage processPage(PdfPage page) {
 		page.getImages().forEach(image -> {
 			List<BufferedImage> extractedImages = this.imageProcessor.extractBarcodeImages(image);
-			processExtractedImages(extractedImages,page);
+			processExtractedImages(extractedImages, page);
 		});
 		return page;
 	}
-
+	
+	/**
+	 * 
+	 * @param extractedImages
+	 * @param page
+	 */
 	private void processExtractedImages(List<BufferedImage> extractedImages, PdfPage page) {
 		extractedImages.forEach(image -> {
-			String decodedBarcode = decodeImage(image);
+			BufferedImage ximage = this.imageProcessor.extractBarcodeImage(image);
+			String decodedBarcode = this.barcodeDecoder.decode(ximage);
 			if (decodedBarcode == null) {
-				decodedBarcode = rotateImageUntilDecoded(image, (i) -> this.decodeImage(i));
+				decodedBarcode = rotateImageUntilDecoded(image, (i) -> this.barcodeDecoder.decode(i));
 			}
-			if(decodedBarcode!=null) {
-				page.getDecodedBarcodeImageMap().put(decodedBarcode, image);
+			if (decodedBarcode != null) {
+				page.getDecodedBarcodeImageMap().put(decodedBarcode, ximage);
 			}
 		});
 
 	}
 
 	/**
+	 * Rotates the images to find angle in which the bar code can be decoded.
+	 * 
 	 * @param image
 	 * @param decodeFunction
-	 * @return Rotates the images to find angle in which the bar code can be
-	 *         decoded.
+	 * @return
 	 */
 	private String rotateImageUntilDecoded(BufferedImage image, Function<BufferedImage, String> decodeFunction) {
 		String decodedBarcode = null;
@@ -84,14 +129,6 @@ public class PdfBarcodesProcessorImpl implements PdfBarcodesProcessor {
 		return decodedBarcode;
 	}
 
-	/**
-	 * @param bufferedImage
-	 * @return Extract the information encoded in barcode image
-	 */
-	private String decodeImage(BufferedImage bufferedImage) {
-		BarcodeDecoder barcodeDecoder = new ZxingBarcodeDecoder();
-		String decodedBarcode = barcodeDecoder.decode(bufferedImage);
-		return decodedBarcode;
-	}
+
 
 }
