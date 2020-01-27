@@ -38,7 +38,7 @@ public class OpenCVHelperTest {
 	@Test
 	public void mat2ImgTest() {
 		// setup
-		String filePath = "src/test/resources/img-test1.png";
+		String filePath = "src/test/resources/img-test1.jpg";
 		Mat tstImageMat = Highgui.imread(filePath);
 		// execute
 		BufferedImage image = OpenCVHelper.mat2Img(tstImageMat);

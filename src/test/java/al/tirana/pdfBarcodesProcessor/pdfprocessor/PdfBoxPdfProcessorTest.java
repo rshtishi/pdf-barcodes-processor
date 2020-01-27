@@ -36,7 +36,7 @@ public class PdfBoxPdfProcessorTest {
 		// execute
 		PdfDocument result = pdfProcessor.processPdfFile(filePath);
 		// verify
-		int totalPagesExpected = 3;
+		int totalPagesExpected = 2;
 		int pageNumberExpected = 0;
 		String pageNameExpected = "pdf-test1#page_0.pdf";
 		int totalImagesExpected = 1;
@@ -44,14 +44,7 @@ public class PdfBoxPdfProcessorTest {
 		assertEquals(pageNumberExpected, result.getPdfPageList().get(0).getPageNumber());
 		assertEquals(pageNameExpected, result.getPdfPageList().get(0).getPageName());
 		assertEquals(totalImagesExpected, result.getPdfPageList().get(0).getImages().size());
-		for (PdfPage page : result.getPdfPageList()) {
-			int count = 0;
-			for (BufferedImage image : page.getImages()) {
-				String imageName = "image_" + count + "_" + page.getPageName() + ".jpg";
-				ImageIO.write(image, "jpg", new File("src/test/resources/" + imageName));
-				count++;
-			}
-		}
 	}
+
 
 }
