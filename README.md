@@ -1,5 +1,8 @@
 # pdf-barcodes-processor
-A library that offers the functionalities for processing bar codes.
+A library that offers the functionalities for processing bar codes. It works with java version 1.8+.
+
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.github.rshtishi/pdfBarcodesProcessor/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.github.rshtishi/pdfBarcodesProcessor)
+
 
 pdf-barcodes-processor inlcudes the following dependencies:
 
@@ -21,15 +24,15 @@ pdf-barcodes-processor inlcudes the following dependencies:
   #Example 1 (Extracting barcodes from a pdf, and decoding the extracted barcodes)
   
   ```
-  //creating the imageProcessor instance , pdfbarcodesprocessor depends from this class and it important to be customized
-  //according to your needs
+  //creating the imageProcessor instance , pdfbarcodesprocessor depends from this class and it important 
+  // to be customized according to your needs
   ImageProcessor imageProcessor = new OpenCVImageProcessor();
   
-  //we set the ration of barcode image compared to overall image, width ratio and height ratio
+  //we set the ratio of barcode image with image containing the barcode image, width ratio and height ratio
   imageProcessor.setBarcodeRatioToImage(0.4, 0.6);
   
   //it is important to pass the classifier, you can download the classifier from the src/main/resources/classifier-4 folder 
-  //place it in your project and after that setting in image processor instance
+  //place it in your project and after that set classifierPath property in image processor instance
   imageProcessor.setClassifierPath("src/main/resources/classifier-4/cascade.xml");
   
   //creating the instance of pdf barcode processor and injecting the imageProcessor dependency     
@@ -38,13 +41,13 @@ pdf-barcodes-processor inlcudes the following dependencies:
     
   String filePath = "../pdf-test.pdf";
   
-  //The method processPdfBarcodesPerPage returns document containg pages with information from extracted from pdf pages.
+  //The method processPdfBarcodesPerPage returns document containg pages with information extracted from pdf pages.
   PdfDocument resultDoc = pdfBarcodesProcessor.processPdfBarcodesPerPage(filePath); 
   
   //return the total number of pdf pages
   int totalPagesNo = resultDoc.getTotalPages();
   
-  //save all decoded bar code images from pdf into directory that you specify as argument
+  //save all decoded bar code images from pdf into directory that you passed as argument
   //the image name for decoded barcode would be the decoded barcode text
   resultDoc.saveAllDecodedBarcodeImages("../dirPath");
   
@@ -83,9 +86,10 @@ pdf-barcodes-processor inlcudes the following dependencies:
   imageProcessor.setClassifierPath("src/main/resources/classifier-4/cascade.xml");
    
    //file path of pdf file which we want to process
-  	String filePath = "src/main/resources/test.pdf";
+   String filePath = "src/main/resources/test.pdf";
+   
    //the result after processing the pdf file
-		 PdfDocument resultDoc = pdfBarcodesProcessor.processPdfBarcodesPerPage(filePath);
+   PdfDocument resultDoc = pdfBarcodesProcessor.processPdfBarcodesPerPage(filePath);
   
   ```
   
@@ -95,10 +99,10 @@ pdf-barcodes-processor inlcudes the following dependencies:
   //creating the image processor and customizing to our needs, 
   //It is need to be passed explicitely
   ImageProcessor imageProcessor = new OpenCVImageProcessor();
-		imageProcessor.setBarcodeRatioToImage(0.4, 0.6);
+  imageProcessor.setBarcodeRatioToImage(0.4, 0.6);
   //THis is property which is required to passed in order for the library to work, the classifier defines the 
   //sucessof of the library in finding barcodes in images extracted from pdf
-		imageProcessor.setClassifierPath("src/main/resources/classifier-4/cascade.xml");
+  imageProcessor.setClassifierPath("src/main/resources/classifier-4/cascade.xml");
   
   //it is not required to be passed explicitely
   PdfProcessor pdfProcessor = new PdfBoxPdfProcessor();
@@ -107,7 +111,7 @@ pdf-barcodes-processor inlcudes the following dependencies:
   
   //We create the pdf barcode processor instance
   PdfBarcodesProcessor pdfBarcodesProcessor = new PdfBarcodesProcessorImpl.Builder()
-				.imageProcessor(imageProcessor)
+    .imageProcessor(imageProcessor)
     .pdfProcessor(pdfProcessor)
     .barcodeDecoder(barcodeDecoder)
     .build();
@@ -120,19 +124,17 @@ PdfDocument resultDoc = pdfBarcodesProcessor.processPdfBarcodesPerPage(filePath)
   ```
   
   #### PDFBOX
-  I have used pdfbox to extract the images from pdf page. Depends how pdf it created. If the all content in pdf is an image,
-  than the image extracted would be the whole pdf page. If the pdf containing images and text, than from the pdf page would 
-  be extracted only the images.
+  I have used pdfbox to extract the images from pdf page. If the content in pdf is an image,
+  than the image extracted would be the whole pdf page. If the pdf content contains images and text, than from the pdf page would be extracted only the images.
   
   #### OPENCV
-  I have used opencv for image processing, machine learning and computer vision. With opencv I trained a classifer to recognized 
+  I have used opencv for image processing, machine learning and computer vision. With opencv I trained a classifer to recognize 
   images that have barcode. In this release classifier works if image contain only one barcode  and is aligned horizontally. It 
   recognizes even if it was aligned vertically or askew but the cropping area it not very accurate. In future release I will 
-  better classifier with a larger subset of data. OpenCv i have used also to perform operation on the image like cropping an area
-  or rotating an images. 
+  train classifier with a larger subset of data. OpenCV library is also used to perform operation on the image like cropping ,rotating and etc. 
   
   #### ZXING
-  I have used zxing library to decode the barcode images. It is the best option for open source barcode decoder libraies t'ill now.
+  I have used zxing library to decode the barcode images. It is the best option for open source barcode decoder libraries that i could find.
   
   
   
