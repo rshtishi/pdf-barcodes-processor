@@ -10,11 +10,11 @@ pdf-barcodes-processor inlcudes the following dependencies:
  #To use the library you need to include it in your maven pom as below:
  
 ```
- <dependency>
-  	<groupId>al.tirana</groupId>
-	  <artifactId>pdfBarcodesProcessor</artifactId>
-	  <version>1.0.0-RELEASE</version> 
-  </dependency>
+<dependency>
+  <groupId>com.github.rshtishi</groupId>
+  <artifactId>pdfBarcodesProcessor</artifactId>
+  <version>1.0.1-RELEASE</version>
+</dependency>
   ```
   
   #Example 1 (Extracting barcodes from a pdf, and decoding the extracted barcodes)
