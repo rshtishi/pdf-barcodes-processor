@@ -28,13 +28,13 @@ public class PdfBarcodesProcessorImpl implements PdfBarcodesProcessor {
 
 	private PdfBarcodesProcessorImpl() {
 	}
-	
+
 	public static class Builder {
-		
+
 		private ImageProcessor imageProcessor;
 		private BarcodeDecoder barcodeDecoder;
 		private PdfProcessor pdfProcessor;
-		
+
 		public Builder() {
 			this.pdfProcessor = new PdfBoxPdfProcessor();
 			this.imageProcessor = new OpenCVImageProcessor();
@@ -45,17 +45,17 @@ public class PdfBarcodesProcessorImpl implements PdfBarcodesProcessor {
 			this.pdfProcessor = pdfProcessor;
 			return this;
 		}
-		
+
 		public Builder imageProcessor(ImageProcessor imageProcessor) {
 			this.imageProcessor = new OpenCVImageProcessor();
 			return this;
 		}
-		
+
 		public Builder barcodeDecoder(BarcodeDecoder barcodeDecoder) {
 			this.barcodeDecoder = barcodeDecoder;
 			return this;
 		}
-		
+
 		public PdfBarcodesProcessorImpl build() {
 			PdfBarcodesProcessorImpl pdfProcessor = new PdfBarcodesProcessorImpl();
 			pdfProcessor.pdfProcessor = this.pdfProcessor;
@@ -78,7 +78,8 @@ public class PdfBarcodesProcessorImpl implements PdfBarcodesProcessor {
 	}
 
 	/**
-	 * Process the images of the pdf page and extract the bar codes images from the pdf page.
+	 * Process the images of the pdf page and extract the bar codes images from the
+	 * pdf page.
 	 * 
 	 * @param page
 	 * @return
@@ -90,26 +91,43 @@ public class PdfBarcodesProcessorImpl implements PdfBarcodesProcessor {
 		});
 		return page;
 	}
-	
+
 	/**
-	 * Process the extracted bar code images and decodes the bar code images. 
-	 * And if the bar code is decoded, add the bar code image and decoded text in pdf page.
+	 * Process the extracted bar code images and decodes the bar code images. And if
+	 * the bar code is decoded, add the bar code image and decoded text in pdf page.
 	 * 
 	 * @param extractedImages
 	 * @param page
 	 */
 	private void processExtractedImages(List<BufferedImage> extractedImages, PdfPage page) {
 		extractedImages.forEach(image -> {
-			BufferedImage ximage = this.imageProcessor.extractBarcodeImage(image);
-			String decodedBarcode = this.barcodeDecoder.decode(ximage);
-			if (decodedBarcode == null) {
-				decodedBarcode = rotateImageUntilDecoded(image, (i) -> this.barcodeDecoder.decode(i));
-			}
+			String decodedBarcode = this.decodeBarcodeImage(image);
 			if (decodedBarcode != null) {
-				page.getDecodedBarcodeImageMap().put(decodedBarcode, ximage);
+				page.getDecodedBarcodeImageMap().put(decodedBarcode, image);
+			} else if (decodedBarcode == null) {
+				// extract again with open cv features
+				BufferedImage ximage = this.imageProcessor.extractBarcodeImage(image);
+				decodedBarcode = this.decodeBarcodeImage(image);
+				if (decodedBarcode != null) {
+					page.getDecodedBarcodeImageMap().put(decodedBarcode, image);
+				}
 			}
 		});
+	}
 
+	/**
+	 * Decoding bar code image.
+	 * 
+	 * @param image
+	 * @return
+	 */
+	private String decodeBarcodeImage(BufferedImage image) {
+		String decodedBarcode = this.barcodeDecoder.decode(image);
+		if (decodedBarcode != null) {
+			return decodedBarcode;
+		}
+		decodedBarcode = rotateImageUntilDecoded(image, (i) -> this.barcodeDecoder.decode(i));
+		return decodedBarcode;
 	}
 
 	/**
@@ -130,7 +148,5 @@ public class PdfBarcodesProcessorImpl implements PdfBarcodesProcessor {
 		}
 		return decodedBarcode;
 	}
-
-
 
 }

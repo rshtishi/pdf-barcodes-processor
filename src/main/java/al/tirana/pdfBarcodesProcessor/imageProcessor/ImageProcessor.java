@@ -17,6 +17,13 @@ public interface ImageProcessor {
 	 * @param ratio
 	 */
 	void setBarcodeRatioToImage(double ratio);
+	
+	
+	/**
+	 * Set the url for xml file that contains the classifier information
+	 * @param classifierPath
+	 */
+	void setClassifierPath(String classifierPath);
 
 	/**
 	 * Set the ratio between image size and bar code size inside image.

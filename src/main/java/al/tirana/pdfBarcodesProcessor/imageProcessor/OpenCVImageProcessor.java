@@ -27,12 +27,24 @@ public class OpenCVImageProcessor implements ImageProcessor {
 
 	private double barcodeRatioWidth;
 	private double barcodeRatioHeight;
+	private String classifierPath;
 
 	public OpenCVImageProcessor() {
 		OpenCV.loadLibrary();
 		this.barcodeRatioWidth = 0.5;
 		this.barcodeRatioHeight = 0.5;
+		this.classifierPath = "src/main/resources/classifier-4/cascade.xml";
 	}
+	
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	public void setClassifierPath(String classifierPath) {
+		this.classifierPath = classifierPath;
+	}
+
+
 
 	/**
 	 * {@inheritDoc}
@@ -63,7 +75,7 @@ public class OpenCVImageProcessor implements ImageProcessor {
 	@Override
 	public List<BufferedImage> extractBarcodeImages(BufferedImage image) {
 		Mat imageMat = OpenCVHelper.img2Mat(image);
-		CascadeClassifier classifier = new CascadeClassifier("src/main/resources/classifier-4/cascade.xml");
+		CascadeClassifier classifier = new CascadeClassifier(this.classifierPath);
 		MatOfRect barcodeDetections = new MatOfRect();
 		int width = (int) Math.round(this.barcodeRatioWidth * imageMat.cols());
 		int height = (int) Math.round(this.barcodeRatioHeight * imageMat.rows());
@@ -72,7 +84,7 @@ public class OpenCVImageProcessor implements ImageProcessor {
 		// cropping the barcodes surface
 		List<BufferedImage> imageList = new ArrayList<>();
 		for (Rect rect : barcodeDetections.toArray()) {
-			//extending the size of crop area
+			// extending the size of crop area
 			rect.width += (imageMat.width() - (rect.width + rect.x));
 			rect.height += (imageMat.height() - (rect.height + rect.y));
 			Mat croppedImageMat = new Mat(imageMat, rect);
