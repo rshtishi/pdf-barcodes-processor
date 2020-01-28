@@ -31,7 +31,7 @@ pdf-barcodes-processor inlcudes the following dependencies:
   
   //save all decoded bar code images from pdf into directory that you specify as argument
   //the image name for decoded barcode would be the decoded barcode text
-  pdfDocument.saveAllDecodedBarcodeImages("../dirPath");
+  resultDoc.saveAllDecodedBarcodeImages("../dirPath");
   
   //returns the list with all pdf pages
   List<PdfPage> pageList = resultDoc.getPdfPageList();
