@@ -3,6 +3,8 @@ A library that offers the functionalities for processing bar codes. It works wit
 
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.github.rshtishi/pdfBarcodesProcessor/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.github.rshtishi/pdfBarcodesProcessor)
 
+The link below directs to a test project in github that shows an example of using the pdf-barcodes-processor library.  
+[Project Test Example Of Using Pdf Barcode Reader](https://github.com/rshtishi/pdf-barcodes-processor-test)
 
 pdf-barcodes-processor inlcudes the following dependencies:
 
